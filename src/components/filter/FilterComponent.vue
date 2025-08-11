@@ -97,7 +97,7 @@ const saleOfficers = ref([])
 const distributors = ref([])
 
 // Load Date initially
-axios.post('https://feedend.bditfirm.com/api/market/marketsetup-month').then(res => {
+axios.post('http://127.0.0.1:8000/api/market/marketsetup-month').then(res => {
   months.value = res.data
   if (months.value.length > 0) {
     localFilters.month = months.value[0].month
@@ -107,7 +107,7 @@ axios.post('https://feedend.bditfirm.com/api/market/marketsetup-month').then(res
 })
 
 // Initial load
-axios.post('https://feedend.bditfirm.com/api/market/company-data').then(res => {
+axios.post('http://127.0.0.1:8000/api/market/company-data').then(res => {
   companies.value = res.data
   localFilters.company = companies.value[0] || ''
   localFilters.region = ''
@@ -144,7 +144,7 @@ const fetchRegions = async () => {
   localFilters.region = ''
   regions.value = []
 
-  const res = await axios.post('https://feedend.bditfirm.com/api/market/region-by-company', { company_name: localFilters.company })
+  const res = await axios.post('http://127.0.0.1:8000/api/market/region-by-company', { company_name: localFilters.company })
   regions.value = res.data
 
   emitFilter()
@@ -154,7 +154,7 @@ const fetchAreas = async () => {
   localFilters.area = ''
   areas.value = []
 
-  const res = await axios.post('https://feedend.bditfirm.com/api/market/area-by-region', { region: localFilters.region })
+  const res = await axios.post('http://127.0.0.1:8000/api/market/area-by-region', { region: localFilters.region })
   areas.value = res.data
 
   emitFilter()
@@ -164,7 +164,7 @@ const fetchTerritories = async () => {
   localFilters.territory = ''
   territories.value = []
 
-  const res = await axios.post('https://feedend.bditfirm.com/api/market/territory-by-area', { area: localFilters.area })
+  const res = await axios.post('http://127.0.0.1:8000/api/market/territory-by-area', { area: localFilters.area })
   territories.value = res.data
 
   emitFilter()
@@ -178,8 +178,8 @@ const fetchPersons = async () => {
 
   try {
     const [proNames, salesNames] = await Promise.all([
-      axios.post('https://feedend.bditfirm.com/api/market/distributor_name-by-territory', { territory: localFilters.territory }),
-      axios.post('https://feedend.bditfirm.com/api/market/sales_officer-by-territory', { territory: localFilters.territory }),
+      axios.post('http://127.0.0.1:8000/api/market/distributor_name-by-territory', { territory: localFilters.territory }),
+      axios.post('http://127.0.0.1:8000/api/market/sales_officer-by-territory', { territory: localFilters.territory }),
     ])
 
     distributors.value = proNames.data

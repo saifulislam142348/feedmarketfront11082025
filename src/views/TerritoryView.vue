@@ -95,7 +95,7 @@ async function fetchData() {
             if (val) params.append(key, val)
         })
 
-        const url = `https://feedend.bditfirm.com/api/market/territory?${params.toString()}`
+        const url = `http://127.0.0.1:8000/api/market/territory?${params.toString()}`
         const response = await fetch(url)
         const json = await response.json()
 

@@ -197,7 +197,7 @@ async function fetchData() {
     }
 
 
-    const res = await axios.get(`https://feedend.bditfirm.com/api/market/geography-data-list?${params.toString()}`)
+    const res = await axios.get(`http://127.0.0.1:8000/api/market/geography-data-list?${params.toString()}`)
     console.log(res.data.brandShares)
     rawData.value = res.data.markets
     brands.value = res.data.brandShares

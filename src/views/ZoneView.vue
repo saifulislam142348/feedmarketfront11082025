@@ -120,7 +120,7 @@ function getMonthNameFrom(rowMonth) {
 
 async function fetchData() {
   try {
-    const res = await fetch('https://feedend.bditfirm.com/api/market/zone')
+    const res = await fetch('http://127.0.0.1:8000/api/market/zone')
     const json = await res.json()
     rawData.value = json.tree || {}
 
