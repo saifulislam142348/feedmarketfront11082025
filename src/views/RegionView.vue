@@ -9,6 +9,7 @@
       <table class="min-w-full table-fixed border-collapse text-sm">
         <thead class="bg-blue-600 text-white sticky top-0 z-10">
           <tr>
+            <th class="border border-blue-700 px-4 py-2 w-1 text-left">SL</th>
             <th class="border border-blue-700 px-4 py-2 w-40 text-left">Company</th>
             <th class="border border-blue-700 px-4 py-2 w-36 text-left">Region</th>
             <th class="border border-blue-700 px-4 py-2 w-32 text-left">Month-Year</th>
@@ -17,6 +18,7 @@
         </thead>
         <tbody>
           <tr v-for="(row, index) in flatData" :key="index" class="hover:bg-gray-100 transition-all">
+            <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ index+1 }}</td>
             <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ row.company_name }}</td>
             <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-600">{{ row.region }}</td>
             <td class="border border-gray-300 px-4 py-2 font-medium">
