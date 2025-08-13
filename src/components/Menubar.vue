@@ -11,6 +11,7 @@
 <script setup>
 const menuItems = [
   { name: 'Home', path: '/dashboard' },
+  { name: 'sales Officer Graph', path: '/sales-officer-graph' },
   { name: 'Region', path: '/region' },
   { name: 'Area', path: '/area' },
   { name: 'Territory', path: '/territory' },

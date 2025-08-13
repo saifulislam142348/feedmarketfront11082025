@@ -79,6 +79,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/sales-officer-graph',
+      name: 'salesOfficerGraph',
+      component: () => import('../views/SalesOfficerGraph.vue'),
+      meta: {
+        title: 'Distributor- Aman Group Ltd.',
+        requiresAuth: true
+      }
+    },
+    {
       path: '/import',
       name: 'importJson',
       component: () => import('../components/ImportJson.vue'),
