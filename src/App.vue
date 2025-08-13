@@ -48,14 +48,7 @@
 
   <!-- Main Content -->
   <main class="pt-[130px] container mx-auto px-4 pb-20" v-if="auth.token">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold text-gray-800"></h2>
-      <router-link to="/dashboard"
-        class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded shadow text-sm font-medium">
-        Home
-      </router-link>
-    </div>
-
+    
     <router-view />
   </main>
 

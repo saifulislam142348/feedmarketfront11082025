@@ -2,7 +2,7 @@
   <div class="p-6 mx-auto max-w-7xl">
     <h2 class="text-3xl font-bold mb-6">Market Report (Region)</h2>
 
-    <!-- Filters component (assumed you have it) -->
+    <!-- Filters component -->
     <FilterComponent v-model="filters" />
 
     <div class="overflow-x-auto border rounded shadow mt-4">
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
           <tr v-for="(row, index) in flatData" :key="index" class="hover:bg-gray-100 transition-all">
-            <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ index+1 }}</td>
+            <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ index + 1 }}</td>
             <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ row.company_name }}</td>
             <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-600">{{ row.region }}</td>
             <td class="border border-gray-300 px-4 py-2 font-medium">
@@ -30,12 +30,29 @@
           </tr>
 
           <tr v-if="flatData.length === 0">
-            <td class="border border-gray-300 px-4 py-2 text-center" colspan="4">
+            <td class="border border-gray-300 px-4 py-2 text-center" colspan="5">
               No data found.
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-center items-center gap-2 mt-4">
+      <button class="page-btn" :disabled="pagination.current_page === 1" @click="goToPage(pagination.current_page - 1)">
+        Prev
+      </button>
+
+      <button v-for="page in pages" :key="page" class="page-btn"
+        :class="{ 'bg-blue-600 text-white': page === pagination.current_page }" @click="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <button class="page-btn" :disabled="pagination.current_page === pagination.last_page"
+        @click="goToPage(pagination.current_page + 1)">
+        Next
+      </button>
     </div>
   </div>
 </template>
@@ -46,6 +63,11 @@ import FilterComponent from '../components/filter/FilterComponent.vue'
 
 const filters = ref({})
 const data = ref([])
+const pagination = ref({
+  current_page: 1,
+  last_page: 1,
+})
+const currentPage = ref(1)
 
 // Helpers
 function capitalize(str) {
@@ -59,20 +81,31 @@ function formatNumber(value) {
   })
 }
 
-// Fetch data from API with filters
-async function fetchData() {
+// Fetch data from API with filters and page number
+async function fetchData(page = 1) {
   try {
     const params = new URLSearchParams()
     Object.entries(filters.value).forEach(([key, val]) => {
-      if (val) params.append(key, val)
+      if (val !== null && val !== undefined && val !== '') {
+        params.append(key, val)
+      }
     })
+    params.append('page', page)
 
     const url = `http://127.0.0.1:8000/api/market/region?${params}`
     const response = await fetch(url)
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
     const json = await response.json()
+    // Update pagination info safely
+    console.log('Pagination data:', json)
+    pagination.value = {
+      current_page: json.currentPage || 1,
+      last_page: json.lastPage || 1,
+    }
 
-    if (Array.isArray(json)) {
-      data.value = json
+    // Set data based on API shape
+    if (Array.isArray(json.nestedData)) {
+      data.value = json.nestedData
     } else if (json && Array.isArray(json.data)) {
       data.value = json.data
     } else {
@@ -84,17 +117,32 @@ async function fetchData() {
   }
 }
 
-// Compute a flat array from nested data for simple table rows
+// Change page handler
+function goToPage(page) {
+  if (page >= 1 && page <= pagination.value.last_page) {
+    currentPage.value = page
+  }
+}
+
+// Computed pages array for pagination buttons
+const pages = computed(() => {
+  const total = pagination.value.last_page || 1
+  return Array.from({ length: total }, (_, i) => i + 1)
+})
+
+// Flatten nested data to simple rows for the table
 const flatData = computed(() => {
   const result = []
   for (const company of data.value) {
+    if (!company.regions) continue
     for (const region of company.regions) {
+      if (!region.months) continue
       for (const month of region.months) {
         result.push({
-          company_name: company.company_name,
-          region: region.region,
-          month: month.month,
-          year: month.year,
+          company_name: company.company_name || '',
+          region: region.region || '',
+          month: month.month || '',
+          year: month.year || '',
           qty: month.do_qty || 0,
         })
       }
@@ -103,9 +151,42 @@ const flatData = computed(() => {
   return result
 })
 
-// Watch filters and refetch data
-watch(filters, fetchData, { deep: true })
+// Watch filters change, reset page to 1 and fetch new data
+watch(filters, () => {
+  currentPage.value = 1
+  fetchData(1)
+}, { deep: true })
 
-// Initial fetch on mount
-onMounted(fetchData)
+// Watch currentPage change and fetch data for that page
+watch(currentPage, (page) => {
+  fetchData(page)
+})
+
+// Initial data fetch
+onMounted(() => {
+  fetchData()
+})
 </script>
+
+<style scoped>
+.page-btn {
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.25rem;
+  border: 1px solid #3b82f6;
+  background-color: white;
+  color: #3b82f6;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>

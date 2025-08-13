@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6  mx-auto">
+  <div class="p-6 mx-auto">
     <!-- Filter Controls -->
     <div class="mb-6">
       <div class="inline-flex flex-wrap gap-4 items-center">
@@ -21,30 +21,49 @@
           Distributor Wise Monthly Qty
         </router-link>
 
-        <!-- Year Dropdown -->
+        <!-- Filters -->
         <div class="flex items-center gap-4">
           <!-- Year Dropdown -->
-          <el-select v-model="year" placeholder="Select Year" clearable filterable @change="fetchData" class="w-32">
+          <el-select v-model="filters.year" placeholder="Select Year" clearable filterable @change="fetchData"
+            class="w-32">
             <el-option :value="null" label="All Years" />
             <el-option v-for="y in availableYears" :key="y" :label="y.toString()" :value="y" />
           </el-select>
-
-          <!-- Month Dropdown -->
-          <el-select v-model="agent" placeholder="Select Distributor" clearable filterable @change="fetchData"
-            class="w-32">
-            <el-option :value="null" label="All Distributor" />
-            <el-option v-for="m in distributors" :key="m.name" :label="m.name" :value="m.name" />
+          <!-- Region -->
+          <el-select v-model="filters.region" placeholder="Select Region" clearable filterable class="w-48"
+            @change="fetchAreas">
+            <el-option label="Select Region" />
+            <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
           </el-select>
 
-          <!-- Zone Dropdown -->
-          <el-select v-model="sales_officer" placeholder="Select Sales" clearable filterable @change="fetchData"
-            class="w-32">
+          <!-- Area -->
+          <el-select v-model="filters.area" placeholder="Select Area" clearable filterable class="w-48"
+            @change="fetchTerritories">
+            <el-option label="Select Area" />
+            <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
+          </el-select>
+
+          <!-- Territory -->
+          <el-select v-model="filters.territory" placeholder="Select Territory" clearable filterable class="w-48"
+            @change="fetchPersons">
+            <el-option label="Select Territory" />
+            <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
+          </el-select>
+
+          <!-- Distributor Dropdown -->
+          <el-select v-model="filters.agent" placeholder="Select Distributor" clearable filterable @change="fetchData"
+            class="w-40">
+            <el-option :value="null" label="All Distributor" />
+            <el-option v-for="m in distributors" :key="m.id ?? m.name" :label="m.name" :value="m.name" />
+          </el-select>
+
+          <!-- Sales Officer Dropdown -->
+          <el-select v-model="filters.sales_officer" placeholder="Select Sales Person" clearable filterable
+            @change="fetchData" class="w-40">
             <el-option :value="null" label="All Sales Person" />
-            <el-option v-for="z in saleOfficers" :key="z" :label="z" :value="z" />
+            <el-option v-for="z in saleOfficers" :key="z.id ?? z" :label="z" :value="z" />
           </el-select>
         </div>
-
-
       </div>
     </div>
 
@@ -53,23 +72,67 @@
       <table class="min-w-full table-fixed border-collapse text-sm">
         <thead class="bg-blue-600 text-white sticky top-0 z-10">
           <tr>
-            <th class="px-4 py-2 border border-blue-700 text-left">SL</th>
-            <th class="px-4 py-2 border border-blue-700 text-left">Sale Person</th>
-            <th class="px-4 py-2 border border-blue-700 text-center">Year</th>
-            <th v-for="month in months" :key="month" class="px-4 py-2 border border-blue-700 text-center capitalize">
+            <th class="px-4 py-2 border border-blue-700 w-1 text-left">SL</th>
+            <th class="px-4 py-2 border border-blue-700 w-10 text-left">Sales Officer</th>
+            <th class="px-4 py-2 border border-blue-700 w-15 text-left">Distributor</th>
+            <th class="px-4 py-2 border border-blue-700 w-5 text-center">Year</th>
+            <th v-for="month in months" :key="month"
+              class="px-4 py-2 border border-blue-700 w-auto text-center capitalize">
               {{ month }}
             </th>
+            <th class="px-4 py-2 border border-blue-700 w-1 text-center">Total</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(row, index) in data" :key="row.sales_officer + '-' + row.year"
             :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
+            <td class="px-4 py-2 border border-gray-300 font-semibold text-gray-800">
+              {{ index + 1 }}
+            </td>
+            <td class="px-4 py-2 border border-gray-300 font-semibold text-gray-800">
+              {{ row.sales_officer ?? 'No Sales Person' }}
 
-            <td class="px-4 py-2 border border-gray-300 font-semibold text-gray-800">{{ index + 1 }}</td>
-            <td class="px-4 py-2 border border-gray-300 font-semibold text-gray-800">{{ row.sales_officer ?? "Sales Person" }}</td>
+              <br>
+              <span class="font-bold border-green-400 rounded-lg">{{ row.region }}-> {{ row.area }}-> {{
+                row.territory }}</span>
+              <br>
+              <div class="relative group inline-block">
+                <!-- Display shortened info -->
+                <span :class="{
+                  'text-green-700 bg-green-100 border border-green-400 rounded-lg px-1 py-0.5 ': row.agent_type === 'Credit Agent',
+                  'text-blue-700 bg-blue-100 border border-blue-400 rounded-lg px-1 py-0.5 ': row.agent_type === 'Cash Agent',
+                  'text-red-700 bg-red-100 border border-red-400 rounded-lg px-1 py-0.5 ': row.agent_type !== 'Credit Agent' && row.agent_type !== 'Cash Agent',
+                  'text-xs': true
+                }">
+                  {{ row.agent_type ?? 'No agent type' }}
+                </span>
+
+
+
+              </div>
+
+
+            </td>
+
+            <td class="px-4 py-2 border border-gray-300 text-center"> {{ row.distributor_name ?? 'No Distributor' }}
+            </td>
             <td class="px-4 py-2 border border-gray-300 text-center">{{ row.year }}</td>
             <td v-for="month in months" :key="month" class="px-4 py-2 border border-gray-300 text-right font-mono">
-              {{ formatNumber(row.months[month]) }}
+              {{ formatNumber(row.months?.[month] || 0) }}
+            </td>
+            <td class="px-4 py-2 border border-gray-300 text-center">
+              <!-- Total Qty for the row -->
+              <span v-if="row.months" class="font-bold text-gray-800">
+                {{formatNumber(Object.values(row.months).reduce((a, b) => a + b, 0))}}
+              </span>
+              <!-- Fallback if months is not defined -->
+              <span v-else class="font-bold text-gray-800">0</span>
+            </td>
+
+          </tr>
+          <tr v-if="data.length === 0">
+            <td :colspan="3 + months.length" class="text-center text-gray-500 py-4">
+              No data available.
             </td>
           </tr>
         </tbody>
@@ -81,37 +144,54 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { ElSelect, ElOption } from 'element-plus'
 
 const data = ref([])
 const distributors = ref([])
 const saleOfficers = ref([])
-const agent = ref(null)
-const sales_officer = ref(null)
+const regions = ref([])
+const areas = ref([])
+const territories = ref([])
 
-const year = ref(null)
+
+const filters = ref({
+  year: '',
+  agent: '',
+  sales_officer: '',
+  region: '',
+  area: '',
+  territory: ''
+})
+
 const availableYears = [2022, 2023, 2024, 2025]
-import { ElSelect, ElOption } from 'element-plus' // optional if using `<script setup>`
 
 const months = [
-  'january', 'february', 'march', 'april', 'may', 'june',
-  'july', 'august', 'september', 'october', 'november', 'december'
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
 ]
 
 function formatNumber(value) {
   return value?.toLocaleString(undefined, {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }) || '0'
 }
 
-
 const fetchPersons = async () => {
-  // Reset before fetching
   distributors.value = []
   saleOfficers.value = []
 
   try {
-    // Fetch distributor & salesperson lists in parallel
     const [proNames, salesNames] = await Promise.all([
       axios.post('http://127.0.0.1:8000/api/market/distributor_name-by-territory'),
       axios.post('http://127.0.0.1:8000/api/market/sales_officer-by-territory'),
@@ -119,47 +199,75 @@ const fetchPersons = async () => {
 
     distributors.value = proNames.data || []
     saleOfficers.value = salesNames.data || []
-
-    // If you want to preselect the first item:
-    // agent.value = distributors.value[0] || null
-    // selectedSalesperson.value = saleOfficers.value[0] || null
-
   } catch (error) {
     console.error('Error fetching persons:', error)
     distributors.value = []
     saleOfficers.value = []
   }
+  fetchData()
+}
+
+onMounted(async () => {
+  await fetchPersons()
+  await fetchData()
+  await fetchRegions()
+  await fetchAreas()
+  await fetchTerritories()
+
+})
+
+const fetchRegions = async () => {
+  filters.region = ''
+  regions.value = []
+
+  const res = await axios.post('http://127.0.0.1:8000/api/market/region-by-company', { company_name: filters.company })
+  regions.value = res.data
+
+  fetchData()
+}
+
+const fetchAreas = async () => {
+  filters.area = ''
+  areas.value = []
+
+  const res = await axios.post('http://127.0.0.1:8000/api/market/area-by-region', { region: filters.region })
+  areas.value = res.data
+  fetchData()
+
+}
+
+const fetchTerritories = async () => {
+  filters.territory = ''
+  territories.value = []
+
+  const res = await axios.post('http://127.0.0.1:8000/api/market/territory-by-area', { area: filters.area })
+  territories.value = res.data
+
+  fetchData()
 }
 
 async function fetchData() {
   try {
-    const params = new URLSearchParams()
-    if (year.value) params.append('year', year.value)
-    if (agent.value) params.append('agent', agent.value)
-    if (sales_officer.value) params.append('sales_officer', sales_officer.value)
+    const params = {}
+    if (filters.value.year) params.year = filters.value.year
+    if (filters.value.agent) params.agent = filters.value.agent
+    if (filters.value.sales_officer) params.sales_officer = filters.value.sales_officer
+    if (filters.value.region) params.region = filters.value.region
+    if (filters.value.area) params.area = filters.value.area
+    if (filters.value.territory) params.territory = filters.value.territory
 
-    const query = params.toString()
-    const url = `http://127.0.0.1:8000/api/market/sale-person-wise-monthly-saleQty${query ? `?${query}` : ''}`
-
-    const res = await fetch(url)
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
-
-    const json = await res.json()
-    data.value = json || []
+    const res = await axios.get('http://127.0.0.1:8000/api/market/sale-person-wise-monthly-saleQty', { params })
+    data.value = res.data || []
   } catch (e) {
     console.error('Failed to fetch data:', e)
     data.value = []
   }
 }
 
-
-onMounted(fetchPersons)
-onMounted(fetchData)
+onMounted(async () => {
+  await fetchPersons()
+  await fetchData()
+})
 </script>
 
-<style scoped>
-th,
-td {
-  white-space: nowrap;
-}
-</style>
+<style scoped></style>
