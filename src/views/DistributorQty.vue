@@ -4,8 +4,13 @@
         <div class="mb-6">
             <div class="inline-flex flex-wrap gap-4 items-center">
                 <!-- Navigation -->
-                <router-link to="/sale-quantity"
-                    class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded-xl shadow-md transition text-sm font-semibold">
+                <!-- Navigation -->
+                <router-link to="/sale-quantity" :class="[
+                    'flex items-center gap-2 py-2 px-5 rounded-xl shadow-md transition text-sm font-semibold',
+                    $route.path === '/sale-quantity'
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : ' text-stone-800 bg-white hover:bg-gray-100'
+                ]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 17v-6h13M3 17h6m-6 0v2a2 2 0 002 2h6a2 2 0 002-2v-2" />
@@ -13,8 +18,12 @@
                     Sale Person Wise Monthly Qty
                 </router-link>
 
-                <router-link to="/distributor-quantity"
-                    class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-xl shadow-md transition text-sm font-semibold">
+                <router-link to="/distributor-quantity" :class="[
+                    'flex items-center gap-2 py-2 px-5 rounded-xl shadow-md transition text-sm font-semibold',
+                    $route.path === '/distributor-quantity'
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : ' text-stone-800 bg-white hover:bg-gray-100'
+                ]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h4l3-3 3 3h4v10H3z" />
                     </svg>
@@ -144,6 +153,7 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { ElSelect, ElOption } from 'element-plus'
+import { useRoute } from 'vue-router'
 
 const data = ref([])
 const distributors = ref([])
@@ -151,6 +161,7 @@ const saleOfficers = ref([])
 const regions = ref([])
 const areas = ref([])
 const territories = ref([])
+const $route = useRoute()
 
 
 const filters = ref({
