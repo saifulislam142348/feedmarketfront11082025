@@ -110,7 +110,7 @@
             </div>
             <!-- every month wise total qty  -->
             <div class="mt-4 flex gap-4 items-center">
-                <span class="text-gray-800 font-bold">Qty:</span>
+                <!-- <span class="text-gray-800 font-bold">Qty:</span> -->
                 <span v-for="month in months" :key="month"
                     class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
                     {{ month.charAt(0).toUpperCase() + month.slice(1) }}: {{
