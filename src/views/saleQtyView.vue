@@ -93,7 +93,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, index) in data" :key="row.sales_officer + '-' + row.year"
+          <tr v-for="(row, index) in data" :key="row.distributor_name + '-' + row.year"
             :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
             <td class="px-4 py-2 border border-gray-300 font-semibold text-gray-800">
               {{ index + 1 }}
