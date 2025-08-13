@@ -21,7 +21,7 @@
                 <router-link to="/distributor-quantity" :class="[
                     'flex items-center gap-2 py-2 px-5 rounded-xl shadow-md transition text-sm font-semibold',
                     $route.path === '/distributor-quantity'
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
                         : ' text-stone-800 bg-white hover:bg-gray-100'
                 ]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -72,7 +72,47 @@
                         <el-option :value="null" label="All Sales Person" />
                         <el-option v-for="z in saleOfficers" :key="z.id ?? z" :label="z" :value="z" />
                     </el-select>
+                    <!-- /agent type filer -->
+                    <el-select v-model="filters.agent_type" placeholder="Select Agent Type" clearable filterable
+                        @change="fetchData" class="w-40">
+                        <el-option :value="null" label="All Agent Types" />
+                        <!-- static  -->
+            
+                       <el-option label="Credit Agent" value="Credit Agent" />
+                        <el-option label="Cash Agent" value="Cash Agent" />
+                        <el-option label="Closed Agent" value="Closed Agent" />      
+
+
+                    
+                     
+                    </el-select>
                 </div>
+            </div>
+            <!-- Refresh Button -->
+            <!-- <div class="mt-4">
+                <button @click="refreshFilters"
+                    class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                    <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v1m-4 10h1a4 4 0 004-4v-1a4 4 0 00-4-4h-1a4 4 0 00-4 4v                
+1a4 4 0 004 4z" />
+                    </svg>
+                    Refresh
+                </button>
+            </div> -->
+
+            <!-- 3 agent type count  credit agent ,cash agent , closed agent -->
+
+            <div class="mt-4 flex gap-4 items-center">
+                <span class="text-green-700 bg-green-100 border  border-green-400 rounded-lg px-2 py-1 text-xs">
+                    Credit Agent: {{data.filter(row => row.agent_type === 'Credit Agent').length}}
+                </span>
+                <span class="text-blue-700 bg-blue-100 border border-blue-400 rounded-lg px-2 py-1 text-xs">
+                    Cash Agent: {{data.filter(row => row.agent_type === 'Cash Agent').length}}
+                </span>
+                <span class="text-red-700 bg-red-100 border border-red-400 rounded-lg px-2 py-1 text-xs">
+                    Closed Agent: {{data.filter(row => row.agent_type !== 'Credit Agent' && row.agent_type !== 'Cash Agent').length }}
+                </span>
             </div>
         </div>
 
@@ -101,8 +141,9 @@
                         <td class="px-4 py-2 border border-gray-300 font-semibold text-gray-800">
                             {{ row.distributor_name ?? 'No Distributor' }}
                             <br>
-                            <span class="font-bold border-green-400 rounded-lg">{{ row.region }}-> {{ row.area }}-> {{
-                                row.territory }}</span>
+                            <span class="font-bold border-green-400 rounded-lg">{{ row.region }}-> {{ row.area }}->
+                                {{
+                                    row.territory }}</span>
                             <br>
                             <div class="relative group inline-block">
                                 <!-- Display shortened info -->
@@ -163,6 +204,9 @@ const areas = ref([])
 const territories = ref([])
 const $route = useRoute()
 
+// Initialize filters   
+
+
 
 const filters = ref({
     year: '',
@@ -170,8 +214,23 @@ const filters = ref({
     sales_officer: '',
     region: '',
     area: '',
-    territory: ''
+    territory: '',
+    agent_type: ''
 })
+
+const refreshFilters = async () => {
+    filters.value = {
+        year: '',
+        agent: '',
+        sales_officer: '',
+        region: '',
+        area: '',
+        territory: '',
+        agent_type: ''
+    }
+    await fetchPersons()
+    await fetchData()
+}
 
 const availableYears = [2022, 2023, 2024, 2025]
 
@@ -265,9 +324,10 @@ async function fetchData() {
         if (filters.value.region) params.region = filters.value.region
         if (filters.value.area) params.area = filters.value.area
         if (filters.value.territory) params.territory = filters.value.territory
+        if (filters.value.agent_type) params.agent_type = filters.value.agent_type
 
         const res = await axios.get('http://127.0.0.1:8000/api/market/distributor-wise-monthly-saleQty', { params })
-        data.value = res.data || []
+        data.value = res.data.result || []
     } catch (e) {
         console.error('Failed to fetch data:', e)
         data.value = []
