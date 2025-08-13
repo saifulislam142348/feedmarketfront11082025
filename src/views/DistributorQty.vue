@@ -77,29 +77,23 @@
                         @change="fetchData" class="w-40">
                         <el-option :value="null" label="All Agent Types" />
                         <!-- static  -->
-            
-                       <el-option label="Credit Agent" value="Credit Agent" />
+
+                        <el-option label="Credit Agent" value="Credit Agent" />
                         <el-option label="Cash Agent" value="Cash Agent" />
-                        <el-option label="Closed Agent" value="Closed Agent" />      
+                        <el-option label="Closed Agent" value="Closed Agent" />
 
 
-                    
-                     
+
+
                     </el-select>
+                    <button @click="refreshFilters"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+        
+                        Refresh
+                    </button>
                 </div>
             </div>
-            <!-- Refresh Button -->
-            <!-- <div class="mt-4">
-                <button @click="refreshFilters"
-                    class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-                    <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v1m-4 10h1a4 4 0 004-4v-1a4 4 0 00-4-4h-1a4 4 0 00-4 4v                
-1a4 4 0 004 4z" />
-                    </svg>
-                    Refresh
-                </button>
-            </div> -->
+
 
             <!-- 3 agent type count  credit agent ,cash agent , closed agent -->
 
@@ -113,6 +107,19 @@
                 <span class="text-red-700 bg-red-100 border border-red-400 rounded-lg px-2 py-1 text-xs">
                     Closed Agent: {{data.filter(row => row.agent_type !== 'Credit Agent' && row.agent_type !== 'Cash Agent').length }}
                 </span>
+            </div>
+            <!-- every month wise total qty  -->
+            <div class="mt-4 flex gap-4 items-center">
+                <span class="text-gray-800 font-bold">Qty:</span>
+                <span v-for="month in months" :key="month"
+                    class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
+                    {{ month.charAt(0).toUpperCase() + month.slice(1) }}: {{
+                        formatNumber(data.reduce((total, row) => total + (row.months?.[month] || 0), 0)) }}
+                </span>
+                <span class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
+                    Total: {{
+                        formatNumber(data.reduce((total, row) => total + Object.values(row.months || {}).reduce((a, b) => a + b, 0), 0)) }}
+                </span>     
             </div>
         </div>
 
