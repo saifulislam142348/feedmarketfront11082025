@@ -229,44 +229,45 @@ async function fetchZoneTreeData(company_name, month, year) {
 }
 // region tree
 function regionRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals) {
-    const labels = ['Region: ', 'Area: ', 'Territory: ', 'sales_officer: ']
-    let html = '<ul>'
+    const labels = ['Region: ', 'Area: ', 'Territory: ', 'Sales Officer: '];
+    let html = '<ul>';
 
     for (const region in tree) {
-        const regionNode = tree[region]
-        const regionLabel = `${labels[0]}${region} (${regionTotals?.[region] || 0} Person)`
-        html += `<li><details open><summary><strong>${regionLabel}</strong></summary><ul>`
+        const regionNode = tree[region];
+        const regionLabel = `${labels[0]}${region} (${regionTotals?.[region] || 0} Person)`;
+        html += `<li><details open><summary><strong>${regionLabel}</strong></summary><ul>`;
 
         for (const area in regionNode) {
-            const areaNode = regionNode[area]
-            const areaLabel = `${labels[1]}${area} (${areaTotals?.[region]?.[area] || 0} Person)`
-            html += `<li class="ml-8"><details><summary><strong>${areaLabel}</strong></summary><ul>`
+            const areaNode = regionNode[area];
+            const areaLabel = `${labels[1]}${area} (${areaTotals?.[region]?.[area] || 0} Person)`;
+            html += `<li class="ml-8"><details><summary><strong>${areaLabel}</strong></summary><ul>`;
 
             for (const territory in areaNode) {
-                const territoryNode = areaNode[territory]
-                const territoryLabel = `${labels[2]}${territory} (${territoryTotals?.[region]?.[area]?.[territory] || 0} Person)`
-                html += `<li class="ml-10"><details><summary><strong>${territoryLabel}</strong></summary><ul>`
+                const territoryNode = areaNode[territory];
+                const territoryLabel = `${labels[2]}${territory} (${territoryTotals?.[region]?.[area]?.[territory] || 0} Person)`;
+                html += `<li class="ml-10"><details><summary><strong>${territoryLabel}</strong></summary><ul>`;
 
-
-                for (const sales_officer in territoryNode) {
-
-                    html += `<li class="ml-14">${labels[3]}${sales_officer}</li>`
+                // ✅ Loop over sales_officers object
+                if (territoryNode.sales_officers) {
+                    for (const sales_officer in territoryNode.sales_officers) {
+                        
+                        html += `<li class="ml-14">${labels[3]}${sales_officer}</li>`;
+                    }
                 }
 
-
-
-                html += '</ul></details></li>'
+                html += '</ul></details></li>';
             }
 
-            html += '</ul></details></li>'
+            html += '</ul></details></li>';
         }
 
-
+        html += '</ul></details></li>';
     }
 
-    html += '</ul>'
-    return html
+    html += '</ul>';
+    return html;
 }
+
 
 // area tree
 async function fetchAreaTreeData(region, month, year) {
@@ -297,9 +298,9 @@ async function fetchAreaTreeData(region, month, year) {
 
 
 
-// region tree
+// areaRenderTreeHtml tree
 function areaRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals, level = 0) {
-    const labels = ['Region: ', 'Area: ', 'Territory: ', 'Thana: ', 'sales_officer: ']
+    const labels = ['Region: ', 'Area: ', 'Territory: ',  'sales_officer: ']
     let html = '<ul>'
 
     for (const region in tree) {
