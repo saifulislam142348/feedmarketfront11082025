@@ -88,7 +88,7 @@
                     </el-select>
                     <button @click="refreshFilters"
                         class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-        
+
                         Refresh
                     </button>
                 </div>
@@ -105,7 +105,7 @@
                     Cash Agent: {{data.filter(row => row.agent_type === 'Cash Agent').length}}
                 </span>
                 <span class="text-red-700 bg-red-100 border border-red-400 rounded-lg px-2 py-1 text-xs">
-                    Closed Agent: {{data.filter(row => row.agent_type !== 'Credit Agent' && row.agent_type !== 'Cash Agent').length }}
+                    Closed Agent: {{data.filter(row => row.agent_type !== 'Credit Agent' && row.agent_type !== 'CashAgent').length }}
                 </span>
             </div>
             <!-- every month wise total qty  -->
@@ -114,12 +114,13 @@
                 <span v-for="month in months" :key="month"
                     class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
                     {{ month.charAt(0).toUpperCase() + month.slice(1) }}: {{
-                        formatNumber(data.reduce((total, row) => total + (row.months?.[month] || 0), 0)) }}
+                        formatNumber(data.reduce((total, row) => total + (row.months?.[month] || 0), 0))}}
                 </span>
                 <span class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
                     Total: {{
-                        formatNumber(data.reduce((total, row) => total + Object.values(row.months || {}).reduce((a, b) => a + b, 0), 0)) }}
-                </span>     
+                        formatNumber(data.reduce((total, row) => total + Object.values(row.months || {}).reduce((a, b) => a
+                    + b, 0), 0)) }}
+                </span>
             </div>
         </div>
 
@@ -188,7 +189,7 @@
                     </tr>
                     <tr v-if="data.length === 0">
                         <td :colspan="3 + months.length" class="text-center text-gray-500 py-4">
-                            No data available.
+                            Loading Data.......
                         </td>
                     </tr>
                 </tbody>
@@ -203,6 +204,7 @@ import axios from 'axios'
 import { ElSelect, ElOption } from 'element-plus'
 import { useRoute } from 'vue-router'
 
+
 const data = ref([])
 const distributors = ref([])
 const saleOfficers = ref([])
@@ -212,9 +214,6 @@ const territories = ref([])
 const $route = useRoute()
 
 // Initialize filters   
-
-
-
 const filters = ref({
     year: '',
     agent: '',
@@ -268,9 +267,11 @@ const fetchPersons = async () => {
     saleOfficers.value = []
 
     try {
+        const territory = filters.value.territory || ''
+
         const [proNames, salesNames] = await Promise.all([
-            axios.post('http://127.0.0.1:8000/api/market/distributor_name-by-territory'),
-            axios.post('http://127.0.0.1:8000/api/market/sales_officer-by-territory'),
+            axios.post('http://127.0.0.1:8000/api/market/distributor_name-by-territory', { territory }),
+            axios.post('http://127.0.0.1:8000/api/market/sales_officer-by-territory', { territory }),
         ])
 
         distributors.value = proNames.data || []
@@ -280,8 +281,10 @@ const fetchPersons = async () => {
         distributors.value = []
         saleOfficers.value = []
     }
-    fetchData()
+
+    await fetchData()
 }
+
 
 onMounted(async () => {
     await fetchPersons()
@@ -293,7 +296,7 @@ onMounted(async () => {
 })
 
 const fetchRegions = async () => {
-    filters.region = ''
+    // filters.region = ''
     regions.value = []
 
     const res = await axios.post('http://127.0.0.1:8000/api/market/region-by-company', { company_name: filters.company })
@@ -303,11 +306,13 @@ const fetchRegions = async () => {
 }
 
 const fetchAreas = async () => {
+   
     filters.area = ''
     areas.value = []
 
-    const res = await axios.post('http://127.0.0.1:8000/api/market/area-by-region', { region: filters.region })
+    const res = await axios.post('http://127.0.0.1:8000/api/market/area-by-region', { region: filters.value.region })
     areas.value = res.data
+    console.log('Areas fetched:', areas.value)
     fetchData()
 
 }
@@ -316,7 +321,7 @@ const fetchTerritories = async () => {
     filters.territory = ''
     territories.value = []
 
-    const res = await axios.post('http://127.0.0.1:8000/api/market/territory-by-area', { area: filters.area })
+    const res = await axios.post('http://127.0.0.1:8000/api/market/territory-by-area', { area: filters.value.area })
     territories.value = res.data
 
     fetchData()

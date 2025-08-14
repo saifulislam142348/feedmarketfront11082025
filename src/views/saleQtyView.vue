@@ -119,7 +119,7 @@
                 <span class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
                     Total: {{
                         formatNumber(data.reduce((total, row) => total + Object.values(row.months || {}).reduce((a, b) => a
-                    + b, 0), 0)) }}
+                            + b, 0), 0))}}
                 </span>
             </div>
         </div>
@@ -140,7 +140,13 @@
                         <th class="px-4 py-2 border border-blue-700 w-1 text-center">Total</th>
                     </tr>
                 </thead>
+
+
+
                 <tbody>
+                    <!-- loader ad -->
+
+                    <!-- Data Rows -->
                     <tr v-for="(row, index) in data" :key="row.distributor_name + '-' + row.year"
                         :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
                         <td class="px-4 py-2 border border-gray-300 font-semibold text-gray-800">
@@ -190,7 +196,7 @@
                     </tr>
                     <tr v-if="data.length === 0">
                         <td :colspan="3 + months.length" class="text-center text-gray-500 py-4">
-                            No data available.
+                            Loading Data.......
                         </td>
                     </tr>
                 </tbody>
@@ -270,9 +276,11 @@ const fetchPersons = async () => {
     saleOfficers.value = []
 
     try {
+        const territory = filters.value.territory || ''
+
         const [proNames, salesNames] = await Promise.all([
-            axios.post('http://127.0.0.1:8000/api/market/distributor_name-by-territory'),
-            axios.post('http://127.0.0.1:8000/api/market/sales_officer-by-territory'),
+            axios.post('http://127.0.0.1:8000/api/market/distributor_name-by-territory', { territory }),
+            axios.post('http://127.0.0.1:8000/api/market/sales_officer-by-territory', { territory }),
         ])
 
         distributors.value = proNames.data || []
@@ -282,7 +290,8 @@ const fetchPersons = async () => {
         distributors.value = []
         saleOfficers.value = []
     }
-    fetchData()
+
+    await fetchData()
 }
 
 onMounted(async () => {
@@ -308,7 +317,7 @@ const fetchAreas = async () => {
     filters.area = ''
     areas.value = []
 
-    const res = await axios.post('http://127.0.0.1:8000/api/market/area-by-region', { region: filters.region })
+    const res = await axios.post('http://127.0.0.1:8000/api/market/area-by-region', { region: filters.value.region })
     areas.value = res.data
     fetchData()
 
@@ -318,7 +327,7 @@ const fetchTerritories = async () => {
     filters.territory = ''
     territories.value = []
 
-    const res = await axios.post('http://127.0.0.1:8000/api/market/territory-by-area', { area: filters.area })
+    const res = await axios.post('http://127.0.0.1:8000/api/market/territory-by-area', { area: filters.value.area })
     territories.value = res.data
 
     fetchData()

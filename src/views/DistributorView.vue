@@ -33,7 +33,7 @@
           </tr>
 
           <tr v-if="flatData.length === 0">
-            <td class="border border-gray-300 px-4 py-2 text-center" colspan="7">No data found.</td>
+            <td class="border border-gray-300 px-4 py-2 text-center" colspan="7">Loading Data....</td>
           </tr>
         </tbody>
       </table>
