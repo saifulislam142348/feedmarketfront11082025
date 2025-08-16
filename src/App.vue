@@ -2,7 +2,7 @@
   <!-- Navbar -->
   <header class="bg-blue-700 text-white fixed top-0 inset-x-0 z-50 shadow-md">
     <div class="container mx-auto flex justify-between items-center py-3 px-4">
-      <h1 class="text-xl font-bold tracking-wide">AMAN GROUP LTD.</h1>
+      <h1 class="text-xl font-bold tracking-wide">AMAN FEED LTD.</h1>
 
       <!-- User Dropdown -->
       <div v-if="auth.token" class="relative" ref="dropdownRef">
@@ -48,7 +48,7 @@
 
   <!-- Main Content -->
   <main class="pt-[130px] container mx-auto px-4 pb-20" v-if="auth.token">
-    
+
     <router-view />
   </main>
 

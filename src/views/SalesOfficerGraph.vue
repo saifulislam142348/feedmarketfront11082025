@@ -214,44 +214,35 @@ async function fetchZoneTreeData(company_name, month, year) {
         console.log(data)
         selectedMonth.value = capitalize(month)
         selectedYear.value = year
-        treeHtml.value = regionRenderTreeHtml(
-            data.tree,
-            data.region_totals,
-            data.area_totals,
-            data.territory_totals,
-
-        )
+        treeHtml.value = regionRenderTreeHtml(data )
         await nextTick()
         showModal.value = true
     } catch (e) {
         console.error('Region tree error:', e)
     }
 }
-// region tree
-function regionRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals) {
+function regionRenderTreeHtml(data) {
     const labels = ['Region: ', 'Area: ', 'Territory: ', 'Sales Officer: '];
     let html = '<ul>';
 
-    for (const region in tree) {
-        const regionNode = tree[region];
-        const regionLabel = `${labels[0]}${region} (${regionTotals?.[region] || 0} Person)`;
+    if (!data.regions) return '<p>No data found</p>';
+
+    for (const region of data.regions) {
+        const regionLabel = `${labels[0]}${region.region} (${region.region_sales_officer_count} Person)`;
         html += `<li><details open><summary><strong>${regionLabel}</strong></summary><ul>`;
 
-        for (const area in regionNode) {
-            const areaNode = regionNode[area];
-            const areaLabel = `${labels[1]}${area} (${areaTotals?.[region]?.[area] || 0} Person)`;
+        for (const area of region.areas) {
+            const areaLabel = `${labels[1]}${area.area} (${area.area_sales_officer_count} Person)`;
             html += `<li class="ml-8"><details><summary><strong>${areaLabel}</strong></summary><ul>`;
 
-            for (const territory in areaNode) {
-                const territoryNode = areaNode[territory];
-                const territoryLabel = `${labels[2]}${territory} (${territoryTotals?.[region]?.[area]?.[territory] || 0} Person)`;
+            for (const territory of area.territories) {
+                const territoryLabel = `${labels[2]}${territory.territory} (${territory.territory_sales_officer_count} Person)`;
                 html += `<li class="ml-10"><details><summary><strong>${territoryLabel}</strong></summary><ul>`;
 
-                // ✅ Loop over sales_officers object
-                if (territoryNode.sales_officers) {
-                    for (const sales_officer in territoryNode.sales_officers) {
-                        
-                        html += `<li class="ml-14">${labels[3]}${sales_officer}</li>`;
+                // Loop over salesPersons array
+                if (territory.salesPersons && territory.salesPersons.length > 0) {
+                    for (const sp of territory.salesPersons) {
+                        html += `<li class="ml-14">${labels[3]}${sp.sales_name}</li>`;
                     }
                 }
 
@@ -284,10 +275,7 @@ async function fetchAreaTreeData(region, month, year) {
         selectedMonth.value = capitalize(month)
         selectedYear.value = year
         treeHtml.value = areaRenderTreeHtml(
-            data.tree,
-            data.region_totals,
-            data.area_totals,
-            data.territory_totals,
+          data
         )
         await nextTick()
         showModal.value = true
@@ -298,46 +286,36 @@ async function fetchAreaTreeData(region, month, year) {
 
 
 
-// areaRenderTreeHtml tree
-function areaRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals, level = 0) {
-    const labels = ['Region: ', 'Area: ', 'Territory: ',  'sales_officer: ']
-    let html = '<ul>'
+function areaRenderTreeHtml(data) {
+    const labels = ['Area: ', 'Territory: ', 'Sales Officer: '];
+    let html = '<ul>';
 
-    for (const region in tree) {
-        const regionNode = tree[region]
-        const regionLabel = `${labels[0]}${region} (${regionTotals?.[region] || 0} Person)`
-        html += `<li><details open><summary><strong>${regionLabel}</strong></summary><ul>`
+    if (!data.areas || data.areas.length === 0) return '<p>No data found</p>';
 
-        for (const area in regionNode) {
-            const areaNode = regionNode[area]
-            const areaLabel = `${labels[1]}${area} (${areaTotals?.[region]?.[area] || 0} Person)`
-            html += `<li class="ml-4"><details><summary><strong>${areaLabel}</strong></summary><ul>`
+    for (const area of data.areas) {
+        const areaLabel = `${labels[0]}${area.area} (${area.area_sales_officer_count} Person)`;
+        html += `<li><details open><summary><strong>${areaLabel}</strong></summary><ul>`;
 
-            for (const territory in areaNode) {
-                const territoryNode = areaNode[territory]
-                const territoryLabel = `${labels[2]}${territory} (${territoryTotals?.[region]?.[area]?.[territory] || 0} Person)`
-                html += `<li class="ml-6"><details><summary><strong>${territoryLabel}</strong></summary><ul>`
+        for (const territory of area.territories) {
+            const territoryLabel = `${labels[1]}${territory.territory} (${territory.territory_sales_officer_count} Person)`;
+            html += `<li class="ml-4"><details><summary><strong>${territoryLabel}</strong></summary><ul>`;
 
-
-                for (const sales_officer in territoryNode) {
-
-                    html += `<li class="ml-10">${labels[3]}${sales_officer}</li>`
+            if (territory.salesPersons && territory.salesPersons.length > 0) {
+                for (const sp of territory.salesPersons) {
+                    html += `<li class="ml-6">${labels[2]}${sp.sales_name}</li>`;
                 }
-
-
-
-                html += '</ul></details></li>'
             }
 
-            html += '</ul></details></li>'
+            html += '</ul></details></li>';
         }
 
-        html += '</ul></details></li>'
+        html += '</ul></details></li>';
     }
 
-    html += '</ul>'
-    return html
+    html += '</ul>';
+    return html;
 }
+
 
 
 function capitalize(str) {
