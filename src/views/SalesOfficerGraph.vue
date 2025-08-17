@@ -214,7 +214,7 @@ async function fetchZoneTreeData(company_name, month, year) {
         console.log(data)
         selectedMonth.value = capitalize(month)
         selectedYear.value = year
-        treeHtml.value = regionRenderTreeHtml(data )
+        treeHtml.value = regionRenderTreeHtml(data)
         await nextTick()
         showModal.value = true
     } catch (e) {
@@ -275,7 +275,7 @@ async function fetchAreaTreeData(region, month, year) {
         selectedMonth.value = capitalize(month)
         selectedYear.value = year
         treeHtml.value = areaRenderTreeHtml(
-          data
+            data
         )
         await nextTick()
         showModal.value = true

@@ -96,16 +96,31 @@
 
 
             <!-- 3 agent type count  credit agent ,cash agent , closed agent -->
+            <!-- Agent Type Counters -->
+            <div class="mt-6 flex flex-wrap gap-3 items-center">
 
-            <div class="mt-4 flex gap-4 items-center">
-                <span class="text-green-700 bg-green-100 border  border-green-400 rounded-lg px-2 py-1 text-xs">
+                <!-- Credit Agent -->
+                <span
+                    class="font-semibold text-green-700 bg-green-100 border border-green-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
                     Credit Agent: {{data.filter(row => row.agent_type === 'Credit Agent').length}}
                 </span>
-                <span class="text-blue-700 bg-blue-100 border border-blue-400 rounded-lg px-2 py-1 text-xs">
+
+                <!-- Cash Agent -->
+                <span
+                    class="font-semibold text-blue-700 bg-blue-100 border border-blue-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
                     Cash Agent: {{data.filter(row => row.agent_type === 'Cash Agent').length}}
                 </span>
-                <span class="text-red-700 bg-red-100 border border-red-400 rounded-lg px-2 py-1 text-xs">
-                    Closed Agent: {{data.filter(row => row.agent_type !== 'Credit Agent' && row.agent_type !== 'CashAgent').length }}
+
+                <!-- Closed Agent -->
+                <span
+                    class="font-semibold text-red-700 bg-red-100 border border-red-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
+                    Closed Agent: {{data.filter(row => row.agent_type !== 'Credit Agent' && row.agent_type !== 'Cash Agent').length }}
+                </span>
+
+                <!-- Total Agent -->
+                <span
+                    class="font-semibold text-purple-700 bg-purple-100 border border-purple-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
+                    Total Agent: {{ data.length }}
                 </span>
             </div>
             <!-- every month wise total qty  -->
@@ -119,7 +134,7 @@
                 <span class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
                     Total: {{
                         formatNumber(data.reduce((total, row) => total + Object.values(row.months || {}).reduce((a, b) => a
-                    + b, 0), 0)) }}
+                            + b, 0), 0))}}
                 </span>
             </div>
         </div>
@@ -306,7 +321,7 @@ const fetchRegions = async () => {
 }
 
 const fetchAreas = async () => {
-   
+
     filters.area = ''
     areas.value = []
 
