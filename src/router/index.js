@@ -95,6 +95,14 @@ const router = createRouter({
         title: 'Import - Aman Group Ltd.',
         requiresAuth: true // Add this to routes that need auth
       }
+    },{
+      path: '/import-graph',
+      name: 'importGraphJson',
+      component: () => import('../components/ImportGraphJson.vue'),
+      meta: {
+        title: 'Import - Aman Group Ltd.',
+        requiresAuth: true // Add this to routes that need auth
+      }
     }
   ],
 })
