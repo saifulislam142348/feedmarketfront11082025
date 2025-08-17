@@ -375,7 +375,7 @@ async function fetchData() {
         if (filters.value.agent_type) params.agent_type = filters.value.agent_type
         if (filters.value.region_head) params.region_head = filters.value.region_head
 
-        const res = await axios.get('http://127.0.0.1:8000/api/market/distributor-wise-monthly-saleQty', { params })
+        const res = await axios.get('http://127.0.0.1:8000/api/market/sale-person-wise-monthly-saleQty', { params })
         data.value = res.data.result || []
         regionHeads.value = res.data.regionHeads || []
         monthlyTotalQty.value = res.data.monthly_total_qty || []
