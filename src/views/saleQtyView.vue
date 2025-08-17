@@ -29,9 +29,14 @@
                     </svg>
                     Distributor Wise Monthly Qty
                 </router-link>
-
                 <!-- Filters -->
                 <div class="flex items-center gap-4">
+                    <!-- region head Dropdown -->
+                    <el-select v-model="filters.region_head" placeholder="Region Head" clearable filterable
+                        @change="fetchData" class="w-32">
+                        <el-option :value="null" label="Region Head" />
+                        <el-option v-for="head in regionHeads" :key="head" :label="head" :value="head" />
+                    </el-select>
                     <!-- Year Dropdown -->
                     <el-select v-model="filters.year" placeholder="Select Year" clearable filterable @change="fetchData"
                         class="w-32">
@@ -122,22 +127,26 @@
                     Total Agent: {{ data.length }}
                 </span>
             </div>
-
-            <!-- every month wise total qty  -->
+            <!-- every month wise total qty -->
             <div class="mt-4 flex gap-4 items-center">
-                <!-- <span class="text-gray-800 font-bold">Qty:</span> -->
-                <span v-for="month in months" :key="month"
+                <span v-for="(qty, month) in monthlyTotalQty" :key="month"
                     class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
-                    {{ month.charAt(0).toUpperCase() + month.slice(1) }}: {{
-                        formatNumber(data.reduce((total, row) => total + (row.months?.[month] || 0), 0))}}
+                    {{ month.charAt(0).toUpperCase() + month.slice(1) }}: {{ formatNumber(qty) }}
                 </span>
+
                 <span class="text-gray-800 font-bold px-2 py-1 bg-gray-100 border border-gray-300 rounded-lg">
                     Total: {{
-                        formatNumber(data.reduce((total, row) => total + Object.values(row.months || {}).reduce((a, b) => a
-                            + b, 0), 0))}}
+                        formatNumber(
+                            data.reduce(
+                                (total, row) => total + Object.values(row.months || {}).reduce((a, b) => a + b, 0),
+                                0
+                            )
+                        )
+                    }}
                 </span>
             </div>
         </div>
+
 
         <!-- Table -->
         <div class="overflow-x-auto border rounded shadow">
@@ -147,6 +156,7 @@
                         <th class="px-4 py-2 border border-blue-700 w-1 text-left">SL</th>
                         <th class="px-4 py-2 border border-blue-700 w-10 text-left">Sales Officer</th>
                         <th class="px-4 py-2 border border-blue-700 w-15 text-left">Distributor</th>
+                        <th class="px-4 py-2 border border-blue-700 w-15 text-left">Region Head</th>
                         <th class="px-4 py-2 border border-blue-700 w-5 text-center">Year</th>
                         <th v-for="month in months" :key="month"
                             class="px-4 py-2 border border-blue-700 w-auto text-center capitalize">
@@ -193,6 +203,7 @@
                         </td>
 
                         <td class="px-4 py-2 border border-gray-300 text-center">{{ row.distributor_name }}</td>
+                        <td class="px-4 py-2 border border-gray-300 text-center">{{ row.region_head }}</td>
 
                         <td class="px-4 py-2 border border-gray-300 text-center">{{ row.year }}</td>
                         <td v-for="month in months" :key="month"
@@ -230,9 +241,12 @@ const data = ref([])
 const distributors = ref([])
 const saleOfficers = ref([])
 const regions = ref([])
+const monthlyTotalQty = ref([])
+const regionHeads = ref([])
 const areas = ref([])
 const territories = ref([])
 const $route = useRoute()
+
 
 // Initialize filters   
 
@@ -243,6 +257,7 @@ const filters = ref({
     agent: '',
     sales_officer: '',
     region: '',
+    region_head: '',
     area: '',
     territory: '',
     agent_type: ''
@@ -358,9 +373,13 @@ async function fetchData() {
         if (filters.value.area) params.area = filters.value.area
         if (filters.value.territory) params.territory = filters.value.territory
         if (filters.value.agent_type) params.agent_type = filters.value.agent_type
+        if (filters.value.region_head) params.region_head = filters.value.region_head
 
         const res = await axios.get('http://127.0.0.1:8000/api/market/distributor-wise-monthly-saleQty', { params })
         data.value = res.data.result || []
+        regionHeads.value = res.data.regionHeads || []
+        monthlyTotalQty.value = res.data.monthly_total_qty || []
+
     } catch (e) {
         console.error('Failed to fetch data:', e)
         data.value = []
