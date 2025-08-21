@@ -95,7 +95,8 @@ const router = createRouter({
         title: 'Import - Aman Group Ltd.',
         requiresAuth: true // Add this to routes that need auth
       }
-    },{
+    },
+    {
       path: '/import-graph',
       name: 'importGraphJson',
       component: () => import('../components/ImportGraphJson.vue'),
@@ -103,7 +104,45 @@ const router = createRouter({
         title: 'Import - Aman Group Ltd.',
         requiresAuth: true // Add this to routes that need auth
       }
-    }
+    },
+    {
+      path: '/market-share',
+      name: 'MarketShare',
+      component: () => import('../views/MarketShare.vue'),
+      meta: {
+        title: 'Import - Aman Group Ltd.',
+        requiresAuth: true // Add this to routes that need auth
+      }
+    }, 
+    {
+      path: '/zone-market-share',
+      name: 'ZoneMarketShare',
+      component: () => import('../views/ZoneMarketShare.vue'),
+      meta: {
+        title: 'Import - Aman Group Ltd.',
+        requiresAuth: true // Add this to routes that need auth
+      }
+    },
+    {
+      path: '/region-market-share',
+      name: 'regionMarketShare',
+      component: () => import('../views/RegionMarketShare.vue'),
+      props: (route) => ({ zone: route.query.zone }),// passing zone as a prop
+      meta: {
+        title: 'Import - Aman Group Ltd.',
+        requiresAuth: true // Add this to routes that need auth
+      }
+    },
+    {
+      path: '/area-market-share',
+      name: 'AreaMarketShare',
+      component: () => import('../views/AreaMarketShare.vue'),
+      props: (route) => ({ region: route.query.region }),// passing zone as a prop
+      meta: {
+        title: 'Import - Aman Group Ltd.',
+        requiresAuth: true // Add this to routes that need auth
+      }
+    },
   ],
 })
 

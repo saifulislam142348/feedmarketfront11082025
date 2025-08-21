@@ -17,7 +17,11 @@ const menuItems = [
   { name: 'Territory', path: '/territory' },
   { name: 'Distributor', path: '/distributor-name' },
   { name: 'Sales Officer', path: '/sales-officer' },
-  { name: 'Sale Quantity', path: '/sale-quantity' }
+  { name: 'Sale Quantity', path: '/sale-quantity' },
+  { name: 'MarketShare', path: '/market-share' },
+  { name: 'Zone Market Share', path: '/zone-market-share' },
+  { name: 'Region Market Share', path: '/region-market-share' },
+  { name: 'Area Market Share', path: '/area-market-share' }
 ]
 </script>
 

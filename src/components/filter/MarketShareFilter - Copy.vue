@@ -7,7 +7,17 @@
                 <el-option v-for="item in zones" :key="item" :label="item" :value="item" />
             </el-select>
 
+            <el-select v-model="localFilters.wing" placeholder="Select Wing" filterable class="w-48"
+                @change="fetchDivisions">
+                <el-option label="Select Wing" />
+                <el-option v-for="item in wings" :key="item" :label="item" :value="item" />
+            </el-select>
 
+            <el-select v-model="localFilters.division" placeholder="Select Division" filterable class="w-48"
+                @change="fetchRegions">
+                <el-option label="Select Division" />
+                <el-option v-for="item in divisions" :key="item" :label="item" :value="item" />
+            </el-select>
 
             <el-select v-model="localFilters.region" placeholder="Select Region" filterable class="w-48"
                 @change="fetchAreas">
@@ -33,10 +43,10 @@
             </el-select>
 
 
-            <el-select v-model="localFilters.dealer" placeholder="Select Dealer" filterable class="w-48"
+            <el-select v-model="localFilters.retailer" placeholder="Select Retailer" filterable class="w-48"
                 @change="emitFilter">
-                <el-option label="Select Dealer " />
-                <el-option v-for="item in dealers" :key="item" :label="item" :value="item" />
+                <el-option label="Select Retailer " />
+                <el-option v-for="item in retailers" :key="item" :label="item" :value="item" />
             </el-select>
         </div>
     </div>
@@ -53,7 +63,7 @@ const props = defineProps({
         default: () => ({
             year: '', zone: '', wing: '', division: '',
             region: '', area: '', territory: '', thana: '',
-            dealer: '', month: ''
+            retailer: '', month: ''
         }),
     },
 })
@@ -71,32 +81,79 @@ function emitFilter() {
 
 // Dropdown data
 const zones = ref([])
+const wings = ref([])
+const divisions = ref([])
 const regions = ref([])
 const areas = ref([])
 const territories = ref([])
 const thanas = ref([])
-const dealers = ref([])
+const retailers = ref([])
 
 // Load Zones initially
 axios.post('http://127.0.0.1:8000/api/market/market-zone').then(res => {
     zones.value = res.data
 })
 
+// Fetch functions
+const fetchWings = async () => {
+
+    localFilters.wing = ''
+    localFilters.division = ''
+    localFilters.region = ''
+    localFilters.area = ''
+    localFilters.territory = ''
+    localFilters.thana = ''
+    localFilters.retailer = ''
+    wings.value = []
+    divisions.value = []
+    regions.value = []
+    areas.value = []
+    territories.value = []
+    thanas.value = []
+    retailers.value = []
+
+    if (localFilters.zone) {
+        const res = await axios.post('http://127.0.0.1:8000/api/market/market-wing-by-zone', { zone: localFilters.zone })
+        wings.value = res.data
+    }
+    emitFilter()
+}
+
+const fetchDivisions = async () => {
+    localFilters.division = ''
+    localFilters.region = ''
+    localFilters.area = ''
+    localFilters.territory = ''
+    localFilters.thana = ''
+    localFilters.retailer = ''
+    divisions.value = []
+    regions.value = []
+    areas.value = []
+    territories.value = []
+    thanas.value = []
+    retailers.value = []
+
+    if (localFilters.wing) {
+        const res = await axios.post('http://127.0.0.1:8000/api/market/market-division-by-wing', { wing: localFilters.wing })
+        divisions.value = res.data
+    }
+    emitFilter()
+}
 
 const fetchRegions = async () => {
     localFilters.region = ''
     localFilters.area = ''
     localFilters.territory = ''
     localFilters.thana = ''
-    localFilters.dealer = ''
+    localFilters.retailer = ''
     regions.value = []
     areas.value = []
     territories.value = []
     thanas.value = []
-    dealers.value = []
+    retailers.value = []
 
     if (localFilters.division) {
-        const res = await axios.post('http://127.0.0.1:8000/api/market/market-region-by-zone', { division: localFilters.division })
+        const res = await axios.post('http://127.0.0.1:8000/api/market/market-region-by-division', { division: localFilters.division })
         regions.value = res.data
     }
     emitFilter()
@@ -106,11 +163,11 @@ const fetchAreas = async () => {
     localFilters.area = ''
     localFilters.territory = ''
     localFilters.thana = ''
-    localFilters.dealer = ''
+    localFilters.retailer = ''
     areas.value = []
     territories.value = []
     thanas.value = []
-    dealers.value = []
+    retailers.value = []
 
     if (localFilters.region) {
         const res = await axios.post('http://127.0.0.1:8000/api/market/market-area-by-region', { region: localFilters.region })
@@ -122,10 +179,10 @@ const fetchAreas = async () => {
 const fetchTerritories = async () => {
     localFilters.territory = ''
     localFilters.thana = ''
-    localFilters.dealer = ''
+    localFilters.retailer = ''
     territories.value = []
     thanas.value = []
-    dealers.value = []
+    retailers.value = []
 
     if (localFilters.area) {
         const res = await axios.post('http://127.0.0.1:8000/api/market/market-territory-by-area', { area: localFilters.area })
@@ -136,9 +193,9 @@ const fetchTerritories = async () => {
 
 const fetchThanas = async () => {
     localFilters.thana = ''
-    localFilters.dealer = ''
+    localFilters.retailer = ''
     thanas.value = []
-    dealers.value = []
+    retailers.value = []
 
     if (localFilters.territory) {
         const res = await axios.post('http://127.0.0.1:8000/api/market/market-thana-by-territory', { territory: localFilters.territory })
@@ -148,12 +205,12 @@ const fetchThanas = async () => {
 }
 
 const fetchRetailers = async () => {
-    localFilters.dealer = ''
-    dealers.value = []
+    localFilters.retailer = ''
+    retailers.value = []
 
     if (localFilters.thana) {
         const res = await axios.post('http://127.0.0.1:8000/api/market/market-retailer-by-thana', { thana: localFilters.thana })
-        dealers.value = res.data
+        retailers.value = res.data
     }
     emitFilter()
 }

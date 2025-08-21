@@ -1,6 +1,6 @@
 <template>
   <div class="p-6 mx-auto">
-    <h2 class="text-3xl font-bold mb-6">Market Share with Month-Year</h2>
+    <h2 class="text-3xl font-bold mb-6">Region Market Share Bag Qty</h2>
 
     <!-- Filter -->
     <MarketShareFilter v-model="filters" />
@@ -9,12 +9,14 @@
     <div class="p-6 bg-white shadow-xl rounded-2xl border border-gray-200 overflow-x-auto whitespace-nowrap">
       <div class="flex gap-6 pb-2 items-center text-sm font-bold text-gray-800">
         <div v-if="filters.zone" class="chip bg-blue-100 text-blue-800">Zone: {{ filters.zone }}</div>
+        <div v-if="filters.wing" class="chip bg-purple-100 text-purple-800">Wing: {{ filters.wing }}</div>
+        <div v-if="filters.division" class="chip bg-green-100 text-green-800">Division: {{ filters.division }}</div>
         <div v-if="filters.region" class="chip bg-yellow-100 text-yellow-800">Region: {{ filters.region }}</div>
         <div v-if="filters.area" class="chip bg-pink-100 text-pink-800">Area: {{ filters.area }}</div>
         <div v-if="filters.territory" class="chip bg-indigo-100 text-indigo-800">Territory: {{ filters.territory }}
         </div>
         <div v-if="filters.thana" class="chip bg-rose-100 text-rose-800">Thana: {{ filters.thana }}</div>
-        <div v-if="filters.dealer" class="chip bg-rose-100 text-rose-800">Dealer: {{ filters.dealer }}</div>
+        <div v-if="filters.retailer" class="chip bg-rose-100 text-rose-800">Retailer: {{ filters.retailer }}</div>
       </div>
 
       <!-- Brand Share Chips -->
@@ -31,7 +33,7 @@
             </span>
             <!-- quantity -->
             <span title="quantity" class="text-xs font-medium text-stone-900 bg-blue-400 px-2 py-0.5 rounded-full">
-              {{ brand.quantity }}
+                {{ formatNumber(brand.quantity) }}
             </span>
 
 
@@ -67,11 +69,12 @@
 
     <!-- Table -->
     <div class="overflow-x-auto border rounded shadow mt-6">
+      <h1>Market Share for {{ zone }}</h1>
       <table class="min-w-full table-fixed border-collapse text-sm">
         <thead class="bg-blue-600 text-white sticky top-0 z-10">
           <tr>
             <th class="th">SL</th>
-            <th class="th">Dealer</th>
+            <th class="th">Region</th>
             <th v-for="brand in brandFields" :key="brand.key" class="th">{{ brand.label }}</th>
             <th class="th">Total</th>
           </tr>
@@ -82,9 +85,10 @@
             <td class="td text-center font-semibold text-gray-800">{{ index + 1 }}</td>
             <!-- Retailer -->
             <td class="td font-semibold text-gray-800">
-              {{ value.dealer ?? 'No Dealer' }}
-              <br>
-              <span class="text-blue-400">{{ value.territory }} <br> {{ value.phone }}</span>
+             <RouterLink :to="{ path: '/area-market-share', query: { region: value.region } }"
+                class="py-2 hover:underline">
+                {{ value.region }}
+              </RouterLink>
             </td>
 
             <!-- Brand Columns -->
@@ -128,14 +132,29 @@ import { ref, computed, watchEffect, onMounted } from 'vue'
 import api from '../plugins/axios'
 import MarketShareFilter from '../components/filter/MarketShareFilter.vue'
 
+
 const rawData = ref([])
-const filters = ref({})
 const brands = ref([])
 const totalRetailers = ref(0)
 const amanTotalRetailers = ref(0)
 const otherTotalRetailers = ref(0)
 const pagination = ref({})
 const currentPage = ref(1)
+const { zone } = defineProps({
+  zone: String
+})
+
+const filters = ref({
+  zone: zone || '', // now zone is define
+  region: '',
+  area: '',
+  territory: '',
+  thana: '',
+  dealer: '',
+  month: '',
+  amanBusiness: ''
+})
+
 
 const brandFields = [
   { key: 'aman', label: 'Aman' },
@@ -167,9 +186,8 @@ function formatBrand(name) {
 }
 
 function formatNumber(value) {
-  return value
-    ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    : '0.00'
+  if (value == null || isNaN(value)) return 0
+  return Math.round(value)
 }
 
 async function fetchData(page = 1) {
@@ -181,7 +199,7 @@ async function fetchData(page = 1) {
     }
     params.append('page', page)
 
-    const res = await api.get(`market/geography-data-list?${params.toString()}`)
+    const res = await api.get(`market/geography/region-wise-market?${params.toString()}`)
     rawData.value = res.data.markets.data
     brands.value = res.data.brandShares
     totalRetailers.value = res.data.totalRetailers
