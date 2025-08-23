@@ -31,7 +31,7 @@
             </span>
             <!-- quantity -->
             <span title="quantity" class="text-xs font-medium text-stone-900 bg-blue-400 px-2 py-0.5 rounded-full">
-              {{ brand.quantity }}
+              {{ formatNumber(brand.quantity) }}
             </span>
 
 
@@ -63,7 +63,7 @@
         </div>
         <div class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full shadow-sm border border-green-300">
           <span class="text-xs font-semibold text-yellow-800 uppercase tracking-wider">Total Quantity</span>
-          <span class="text-lg font-bold text-yellow-900">{{ total }}</span>
+          <span class="text-lg font-bold text-yellow-900">{{ formatNumber(total) }}</span>
         </div>
       </div>
       <div class="flex justify-center items-center mt-4">
@@ -174,9 +174,8 @@ function formatBrand(name) {
 }
 
 function formatNumber(value) {
-  return value
-    ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    : '0.00'
+  if (value == null || isNaN(value)) return 0
+  return Math.round(value)
 }
 
 async function fetchData(page = 1) {
