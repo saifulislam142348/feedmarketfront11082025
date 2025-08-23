@@ -130,7 +130,7 @@
                     Total Agent: {{ data.length }}
                 </span>
             </div>
-      
+
             <!-- every month wise total qty -->
             <div class="mt-4 flex gap-4 items-center">
                 <span v-for="(qty, month) in monthlyTotalQty" :key="month"
@@ -143,9 +143,9 @@
                         formatNumber(
                             data.reduce(
                                 (total, row) => total + Object.values(row.months || {}).reduce((a, b) => a + b, 0),
-                    0
-                    )
-                    )
+                                0
+                            )
+                        )
                     }}
                 </span>
             </div>

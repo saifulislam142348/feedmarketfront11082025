@@ -3,7 +3,7 @@
     <h2 class="text-3xl font-bold mb-6">Zone Market Share Bag Qty</h2>
 
     <!-- Filter -->
-    <MarketShareFilter v-model="filters" />
+    <!-- <MarketShareFilter v-model="filters" /> -->
 
     <!-- Selected Filters Chips -->
     <div class="p-6 bg-white shadow-xl rounded-2xl border border-gray-200 overflow-x-auto whitespace-nowrap">
@@ -61,6 +61,10 @@
           <span class="text-xs font-semibold text-yellow-800 uppercase tracking-wider">Total Retailers:</span>
           <span class="text-lg font-bold text-yellow-900">{{ totalRetailers }}</span>
         </div>
+        <!-- <div class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full shadow-sm border border-green-300">
+          <span class="text-xs font-semibold text-yellow-800 uppercase tracking-wider">Total Quantity</span>
+          <span class="text-lg font-bold text-yellow-900">{{ total }}</span>
+        </div> -->
       </div>
       <div class="flex justify-center items-center mt-4">
         <span class="text-sm text-gray-600">Showing {{ rawData.length }} records</span>
@@ -140,6 +144,7 @@ const brands = ref([])
 const totalRetailers = ref(0)
 const amanTotalRetailers = ref(0)
 const otherTotalRetailers = ref(0)
+const total = ref(0)
 const pagination = ref({})
 const currentPage = ref(1)
 
@@ -193,6 +198,7 @@ async function fetchData(page = 1) {
     totalRetailers.value = res.data.totalRetailers
     amanTotalRetailers.value = res.data.amanTotalRetailers
     otherTotalRetailers.value = res.data.otherTotalRetailers
+    total.value = res.data.total
     pagination.value = {
       current_page: res.data.markets.current_page,
       last_page: res.data.markets.last_page

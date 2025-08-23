@@ -24,7 +24,7 @@
               <td class="border border-gray-300 px-4 py-2 text-gray-700">{{ row.division }}</td>
               <td class="border border-gray-300 px-4 py-2 text-gray-700 font-medium">{{ row.month }}-{{ row.year }}</td>
               <td class="border border-gray-300 px-4 py-2 text-right font-mono text-gray-900">{{ formatNumber(row.qty)
-                }}</td>
+              }}</td>
             </tr>
 
             <!-- Subtotal row -->
