@@ -3,7 +3,7 @@
     <h2 class="text-3xl font-bold mb-6">Market Share with Month-Year</h2>
 
     <!-- Filter -->
-    <!-- <MarketShareFilter v-model="filters" /> -->
+    <MarketShareFilter v-model="filters" />
 
     <!-- Selected Filters Chips -->
     <div class="p-6 bg-white shadow-xl rounded-2xl border border-gray-200 overflow-x-auto whitespace-nowrap">

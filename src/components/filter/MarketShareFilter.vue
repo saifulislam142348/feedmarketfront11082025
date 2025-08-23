@@ -2,7 +2,7 @@
     <div class="pb-4 pt-4 overflow-x-auto">
         <div class="flex flex-nowrap gap-1 min-w-max">
             <el-select v-model="localFilters.zone" placeholder="Select Zone" filterable class="w-48"
-                @change="fetchWings">
+                @change="fetchRegions">
                 <el-option label="Select Zone" />
                 <el-option v-for="item in zones" :key="item" :label="item" :value="item" />
             </el-select>
@@ -27,7 +27,7 @@
                 <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
             </el-select>
             <el-select v-model="localFilters.thana" placeholder="Select Thana" filterable class="w-48"
-                @change="fetchRetailers">
+                @change="fetchDealers">
                 <el-option label="Select Thana " />
                 <el-option v-for="item in thanas" :key="item" :label="item" :value="item" />
             </el-select>
@@ -51,7 +51,7 @@ const props = defineProps({
     modelValue: {
         type: Object,
         default: () => ({
-            year: '', zone: '', wing: '', division: '',
+            year: '', zone: '',
             region: '', area: '', territory: '', thana: '',
             dealer: '', month: ''
         }),
@@ -80,57 +80,53 @@ const dealers = ref([])
 // Load Zones initially
 axios.post('http://127.0.0.1:8000/api/market/market-zone').then(res => {
     zones.value = res.data
+    fetchRegions()
+    fetchAreas()
+    fetchTerritories()
+    fetchThanas()
+    fetchDealers()
 })
 
 
 const fetchRegions = async () => {
-    localFilters.region = ''
-    localFilters.area = ''
-    localFilters.territory = ''
-    localFilters.thana = ''
-    localFilters.dealer = ''
+
     regions.value = []
     areas.value = []
     territories.value = []
     thanas.value = []
     dealers.value = []
 
-    if (localFilters.division) {
-        const res = await axios.post('http://127.0.0.1:8000/api/market/market-region-by-zone', { division: localFilters.division })
-        regions.value = res.data
-    }
+
+    const res = await axios.post('http://127.0.0.1:8000/api/market/market-region-by-zone', { zone: localFilters.zone })
+    regions.value = res.data
+
     emitFilter()
 }
 
 const fetchAreas = async () => {
-    localFilters.area = ''
-    localFilters.territory = ''
-    localFilters.thana = ''
-    localFilters.dealer = ''
+
     areas.value = []
     territories.value = []
     thanas.value = []
     dealers.value = []
 
-    if (localFilters.region) {
-        const res = await axios.post('http://127.0.0.1:8000/api/market/market-area-by-region', { region: localFilters.region })
-        areas.value = res.data
-    }
+
+    const res = await axios.post('http://127.0.0.1:8000/api/market/market-area-by-region', { region: localFilters.region })
+    areas.value = res.data
+
     emitFilter()
 }
 
 const fetchTerritories = async () => {
-    localFilters.territory = ''
-    localFilters.thana = ''
-    localFilters.dealer = ''
+
     territories.value = []
     thanas.value = []
     dealers.value = []
 
-    if (localFilters.area) {
-        const res = await axios.post('http://127.0.0.1:8000/api/market/market-territory-by-area', { area: localFilters.area })
-        territories.value = res.data
-    }
+
+    const res = await axios.post('http://127.0.0.1:8000/api/market/market-territory-by-area', { area: localFilters.area })
+    territories.value = res.data
+
     emitFilter()
 }
 
@@ -140,21 +136,19 @@ const fetchThanas = async () => {
     thanas.value = []
     dealers.value = []
 
-    if (localFilters.territory) {
-        const res = await axios.post('http://127.0.0.1:8000/api/market/market-thana-by-territory', { territory: localFilters.territory })
-        thanas.value = res.data
-    }
+
+    const res = await axios.post('http://127.0.0.1:8000/api/market/market-thana-by-territory', { territory: localFilters.territory })
+    thanas.value = res.data
+
     emitFilter()
 }
 
-const fetchRetailers = async () => {
+const fetchDealers = async () => {
     localFilters.dealer = ''
     dealers.value = []
+    const res = await axios.post('http://127.0.0.1:8000/api/market/market-retailer-by-thana', { thana: localFilters.thana })
+    dealers.value = res.data
 
-    if (localFilters.thana) {
-        const res = await axios.post('http://127.0.0.1:8000/api/market/market-retailer-by-thana', { thana: localFilters.thana })
-        dealers.value = res.data
-    }
     emitFilter()
 }
 </script>
