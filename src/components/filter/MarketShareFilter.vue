@@ -92,9 +92,6 @@ const fetchRegions = async () => {
 
     regions.value = []
     areas.value = []
-    territories.value = []
-    thanas.value = []
-    dealers.value = []
 
 
     const res = await axios.post('http://127.0.0.1:8000/api/market/market-region-by-zone', { zone: localFilters.zone })
@@ -107,8 +104,8 @@ const fetchAreas = async () => {
 
     areas.value = []
     territories.value = []
-    thanas.value = []
-    dealers.value = []
+
+
 
 
     const res = await axios.post('http://127.0.0.1:8000/api/market/market-area-by-region', { region: localFilters.region })

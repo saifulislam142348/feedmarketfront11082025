@@ -21,10 +21,14 @@
 
       <!-- Brand Share Chips -->
       <div class="flex flex-wrap justify-center items-center gap-2 mt-4">
-        <template v-for="brand in brands" :key="brand.brand">
+        <template v-for="(brand,index) in brands" :key="brand.brand">
           <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-stone-200 border border-blue-200 shadow-sm"
             :class="brand.brand === 'aman' ? 'bg-yellow-400 border text-stone-50 rounded-2xl' : ''">
             <span class="uppercase text-xs font-semibold text-blue-800 tracking-wide">
+                 <span title="position"
+              class="text-xs font-medium bg-amber-600 text-white shadow-md px-2 py-0.5 rounded-full">
+              {{ index + 1 }}{{ getOrdinal(index + 1) }}
+            </span>
               {{ brand.brand === 'other' ? 'Other Brands' : formatBrand(brand.brand) }}
             </span>
 
@@ -160,7 +164,11 @@ const filters = ref({
   amanBusiness: ''
 })
 
-
+function getOrdinal(n) {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return s[(v - 20) % 10] || s[v] || s[0];
+}
 const brandFields = [
   { key: 'aman', label: 'Aman' },
   { key: 'nourish', label: 'Nourish' },
@@ -192,7 +200,7 @@ function formatBrand(name) {
 
 function formatNumber(value) {
   if (value == null || isNaN(value)) return 0
-  return Math.round(value)
+  return Math.round(value).toLocaleString()
 }
 
 async function fetchData(page = 1) {
