@@ -1,7 +1,7 @@
 <template>
   <div class="p-6  mx-auto">
     <h2 class="text-3xl font-bold mb-4">📊 Dealer Wise Market Report</h2>
-
+    
 
   
 
@@ -206,7 +206,7 @@ function drawBarChart(months, years, quantities, label, type) {
 // zone Tree
 async function fetchZoneTreeData(company_name, month, year) {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/market/dealer-zone-wise-distributor-name', {
+    const res = await fetch('http://127.0.0.1:8000/api/market/zone-wise-distributor-name', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ company_name, month, year })
@@ -231,7 +231,7 @@ async function fetchZoneTreeData(company_name, month, year) {
 }
 // region tree
 function zoneRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals) {
-  const labels = ['Region: ', 'Area: ', 'Territory: ', 'Agent: ']
+  const labels = ['Region: ', 'Area: ', 'Territory: ', 'Proprietor: ']
   let html = '<ul>'
 
   for (const region in tree) {
@@ -251,10 +251,10 @@ function zoneRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals) {
         const territoryLabel = `${labels[2]}${territory} (${(territoryTotals?.[region]?.[area]?.[territory] || 0).toFixed(2)} MT)`
         html += `<li class="ml-4"><details><summary><strong>${territoryLabel}</strong></summary><ul>`
 
-        for (const agent in territoryNode) {
-          const qty = territoryNode[agent]
+        for (const proprietor_name in territoryNode) {
+          const qty = territoryNode[proprietor_name]
           // fix label index to 3
-          html += `<li class="ml-14">${labels[3]}${agent} - ${qty.toFixed(2)} MT</li>`
+          html += `<li class="ml-14">${labels[3]}${proprietor_name} - ${qty.toFixed(2)} MT</li>`
         }
 
         html += '</ul></details></li>'
@@ -273,7 +273,7 @@ function zoneRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals) {
 // region tree
 async function fetchRegionTreeData(region, month, year) {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/market/dealer-region-wise-distributor-name', {
+    const res = await fetch('http://127.0.0.1:8000/api/market/region-wise-distributor-name', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ region, month, year })
@@ -300,7 +300,7 @@ async function fetchRegionTreeData(region, month, year) {
 
 
 function regionRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals) {
-  const labels = ['Region: ', 'Area: ', 'Territory: ', 'Agent: ']
+  const labels = ['Region: ', 'Area: ', 'Territory: ', 'Proprietor: ']
   let html = '<ul>'
 
   for (const region in tree) {
@@ -318,9 +318,9 @@ function regionRenderTreeHtml(tree, regionTotals, areaTotals, territoryTotals) {
         const territoryLabel = `${labels[2]}${territory} (${(territoryTotals?.[region]?.[area]?.[territory] || 0).toFixed(2)} MT)`
         html += `<li class="ml-6"><details><summary><strong>${territoryLabel}</strong></summary><ul>`
 
-        for (const agent in territoryNode) {
-          const qty = territoryNode[agent]
-          html += `<li class="ml-10">${labels[3]}${agent} - ${qty.toFixed(2)} MT</li>`
+        for (const proprietor_name in territoryNode) {
+          const qty = territoryNode[proprietor_name]
+          html += `<li class="ml-10">${labels[3]}${proprietor_name} - ${qty.toFixed(2)} MT</li>`
         }
 
         html += '</ul></details></li>'
