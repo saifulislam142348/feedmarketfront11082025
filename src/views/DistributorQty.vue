@@ -175,9 +175,9 @@
         </div>
 
         <!-- Table -->
-        <div class="overflow-x-auto border rounded shadow">
-            <table class="min-w-full table-fixed border-collapse text-sm">
-                <thead class="bg-blue-600 text-white sticky top-0 z-10">
+       <div class="max-h-[500px] overflow-y-auto overflow-x-auto border rounded shadow mt-6">
+      <table class="min-w-full table-fixed border-collapse text-sm">
+        <thead class="bg-blue-600 text-white sticky top-0 z-10">
                     <tr>
                         <th class="px-4 py-2 border border-blue-700 w-1 text-left">SL</th>
                         <th class="px-4 py-2 border border-blue-700 w-15 text-left">Distributor</th>

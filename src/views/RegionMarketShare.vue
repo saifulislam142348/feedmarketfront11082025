@@ -76,45 +76,38 @@
     </div>
 
     <!-- Table -->
-    <div class="overflow-x-auto border rounded shadow mt-6">
-      <h1>Market Share for {{ zone }}</h1>
-      <table class="min-w-full table-fixed border-collapse text-sm">
-        <thead class="bg-blue-600 text-white sticky top-0 z-10">
-          <tr>
-            <th class="th">SL</th>
-            <th class="th">Region</th>
-            <th v-for="brand in brandFields" :key="brand.key" class="th">{{ brand.label }}</th>
-            <th class="th">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(value, index) in rawData" :key="index">
-            <!-- Serial Number -->
-            <td class="td text-center font-semibold text-gray-800">{{ index + 1 }}</td>
-            <!-- Retailer -->
-            <td class="td font-semibold text-gray-800">
-             <RouterLink :to="{ path: '/area-market-share', query: { region: value.region } }"
-                class="py-2 hover:underline">
-                {{ value.region }}
-              </RouterLink>
-            </td>
+  <!-- Scrollable Table Container -->
+<div class="max-h-[500px] overflow-y-auto overflow-x-auto border rounded shadow mt-6">
+  <table class="min-w-full table-fixed border-collapse text-sm">
+    <thead class="bg-blue-600 text-white sticky top-0 z-10">
+      <tr>
+        <th class="th px-2 py-2">SL</th>
+        <th class="th px-2 py-2">Dealer</th>
+        <th v-for="brand in brandFields" :key="brand.key" class="th px-2 py-2">{{ brand.label }}</th>
+        <th class="th px-2 py-2">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(value, index) in rawData" :key="index">
+        <td class="td text-center font-semibold text-gray-800 px-2 py-1">{{ index + 1 }}</td>
+        <td class="td font-semibold text-gray-800 px-2 py-1">
+          {{ value.dealer ?? 'No Dealer' }}<br>
+          <span class="text-blue-400">{{ value.territory }} <br> {{ value.phone }}</span>
+        </td>
+        <td v-for="brand in brandFields" :key="brand.key" class="td text-right font-mono px-2 py-1">
+          {{ formatNumber(value[brand.key]) }}
+          <hr>
+          <span class="text-xs font-bold">{{ value[`${brand.key}_per`] ?? '-' }}%</span>
+        </td>
+        <td class="td text-right font-mono px-2 py-1">
+          {{ formatNumber(value.total) }}
+          <span class="text-xs font-bold">100%</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-            <!-- Brand Columns -->
-            <td v-for="brand in brandFields" :key="brand.key" class="td text-right font-mono">
-              {{ formatNumber(value[brand.key]) }}
-              <hr>
-              <span class="text-xs font-bold">{{ value[`${brand.key}_per`] ?? '-' }}%</span>
-            </td>
-
-            <!-- Total -->
-            <td class="td text-right font-mono">
-              {{ formatNumber(value.total) }}
-              <span class="text-xs font-bold">100%</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
 
     <!-- Pagination -->
     <div class="flex justify-center items-center gap-2 mt-4">
