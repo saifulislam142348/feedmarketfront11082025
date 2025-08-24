@@ -6,6 +6,7 @@
     <FilterComponent v-model="filters" />
 
     <div class="overflow-x-auto border rounded shadow mt-4">
+       <h1>Market Share for {{ region }}</h1>
       <table class="min-w-full table-fixed border-collapse text-sm">
         <thead class="bg-blue-600 text-white sticky top-0 z-10">
           <tr>
@@ -26,10 +27,14 @@
               {{ row.company_name }}
             </td>
             <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-600">
-              {{ row.region }}
+              <RouterLink :to="{ path: '/area', query: { region: row.region } }" class="py-2 hover:underline">
+                {{ row.region }}
+              </RouterLink>
             </td>
             <td class="border border-gray-300 px-4 py-2 font-medium">
-              {{ row.area }}
+              <RouterLink :to="{ path: '/territory', query: { area: row.area } }" class="py-2 hover:underline">
+                {{ row.area }}
+              </RouterLink>
             </td>
             <td class="border border-gray-300 px-4 py-2 font-medium">
               {{ capitalize(row.month) }} - {{ row.year }}
@@ -54,8 +59,21 @@
 import { ref, computed, watch, onMounted } from "vue";
 import FilterComponent from "../components/filter/FilterComponent.vue";
 
-const filters = ref({});
+
 const data = ref([]);
+const { region } = defineProps({
+  region: String
+})
+const filters = ref({
+  year: '',
+  company: '',
+  region: region || '',
+  area: '',
+  territory: '',
+  sales_officer: '',
+  agent: '',
+  month: ''
+});
 
 // ফ্ল্যাটড ডেটা তৈরি
 const flatData = computed(() => {
@@ -119,7 +137,7 @@ async function fetchData() {
 }
 
 // ফিল্টার পরিবর্তনে ও মাউন্টে ডেটা লোড হবে
-watch(filters, fetchData, { deep: true });
+
 onMounted(fetchData);
 </script>
 

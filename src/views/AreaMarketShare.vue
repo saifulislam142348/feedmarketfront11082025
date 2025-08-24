@@ -145,14 +145,14 @@ const otherTotalRetailers = ref(0)
 const total = ref(0)
 const pagination = ref({})
 const currentPage = ref(1)
-const { region } = defineProps({
-  region: String
+const { area } = defineProps({
+  area: String
 })
 
 const filters = ref({
   zone: '', // now zone is defined
   region: '',
-  area: region || '',
+  area: area || '',
   territory: '',
   thana: '',
   dealer: '',

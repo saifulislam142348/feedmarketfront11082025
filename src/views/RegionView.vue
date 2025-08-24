@@ -20,7 +20,11 @@
           <tr v-for="(row, index) in flatData" :key="index" class="hover:bg-gray-100 transition-all">
             <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ index + 1 }}</td>
             <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ row.company_name }}</td>
-            <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-600">{{ row.region }}</td>
+            <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-600">
+              <RouterLink :to="{ path: '/area', query: { region: row.region } }" class="py-2 hover:underline">
+                {{ row.region }}
+              </RouterLink>
+            </td>
             <td class="border border-gray-300 px-4 py-2 font-medium">
               {{ capitalize(row.month) }} - {{ row.year }}
             </td>

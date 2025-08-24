@@ -27,6 +27,7 @@ const router = createRouter({
       path: '/area',
       name: 'Area',
       component: () => import('../views/AreaView.vue'),
+      props: (route) => ({ region: route.query.region }),// passing zone as a prop
       meta: {
         title: 'Area- Aman Group Ltd.',
         requiresAuth: true
@@ -36,6 +37,7 @@ const router = createRouter({
       path: '/territory',
       name: 'Territory',
       component: () => import('../views/TerritoryView.vue'),
+      props:(route)=>({area:route.query.area}),
       meta: {
         title: 'Territory- Aman Group Ltd.',
         requiresAuth: true
@@ -113,7 +115,7 @@ const router = createRouter({
         title: 'Import - Aman Group Ltd.',
         requiresAuth: true // Add this to routes that need auth
       }
-    }, 
+    },
     {
       path: '/zone-market-share',
       name: 'ZoneMarketShare',

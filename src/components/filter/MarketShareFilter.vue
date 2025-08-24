@@ -1,7 +1,7 @@
 <template>
     <div class="pb-4 pt-4 overflow-x-auto">
         <div class="flex flex-nowrap gap-1 min-w-max">
-            <el-select v-model="localFilters.zone" placeholder="Select Zone" filterable class="w-48"
+            <el-select v-model="localFilters.zone" placeholder="Select Zone" filterable clearable class="w-48"
                 @change="fetchRegions">
                 <el-option label="Select Zone" />
                 <el-option v-for="item in zones" :key="item" :label="item" :value="item" />
@@ -9,31 +9,31 @@
 
 
 
-            <el-select v-model="localFilters.region" placeholder="Select Region" filterable class="w-48"
+            <el-select v-model="localFilters.region" placeholder="Select Region" filterable clearable class="w-48"
                 @change="fetchAreas">
                 <el-option label="Select Region" />
                 <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
             </el-select>
 
-            <el-select v-model="localFilters.area" placeholder="Select Area" filterable class="w-48"
+            <el-select v-model="localFilters.area" placeholder="Select Area" filterable clearable class="w-48"
                 @change="fetchTerritories">
                 <el-option label="Select Area" />
                 <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
             </el-select>
 
-            <el-select v-model="localFilters.territory" placeholder="Select Territory" filterable class="w-48"
+            <el-select v-model="localFilters.territory" placeholder="Select Territory" filterable clearable class="w-48"
                 @change="fetchThanas">
                 <el-option label="Select Territory " />
                 <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
             </el-select>
-            <el-select v-model="localFilters.thana" placeholder="Select Thana" filterable class="w-48"
+            <el-select v-model="localFilters.thana" placeholder="Select Thana" filterable clearable class="w-48"
                 @change="fetchDealers">
                 <el-option label="Select Thana " />
                 <el-option v-for="item in thanas" :key="item" :label="item" :value="item" />
             </el-select>
 
 
-            <el-select v-model="localFilters.dealer" placeholder="Select Dealer" filterable class="w-48"
+            <el-select v-model="localFilters.dealer" placeholder="Select Dealer" filterable clearable class="w-48"
                 @change="emitFilter">
                 <el-option label="Select Dealer " />
                 <el-option v-for="item in dealers" :key="item" :label="item" :value="item" />

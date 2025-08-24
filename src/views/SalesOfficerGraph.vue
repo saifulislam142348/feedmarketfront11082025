@@ -32,7 +32,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 
-const companies = ref(['Aman Feed Ltd', 'ASHA'])
+const companies = ref(['Aman Feed Ltd'])
 const selectedCompany = ref('')
 const showModal = ref(false)
 const selectedMonth = ref('')

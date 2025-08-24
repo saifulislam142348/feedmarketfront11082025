@@ -11,10 +11,10 @@
 <script setup>
 const menuItems = [
   { name: 'Home', path: '/dashboard' },
-  { name: 'sales Officer Graph', path: '/sales-officer-graph' },
+  { name: 'Sales Officer Graph', path: '/sales-officer-graph' },
   { name: 'Region', path: '/region' },
-  { name: 'Area', path: '/area' },
-  { name: 'Territory', path: '/territory' },
+  // { name: 'Area', path: '/area' },
+  // { name: 'Territory', path: '/territory' },
   { name: 'Distributor', path: '/distributor-name' },
   { name: 'Sales Officer', path: '/sales-officer' },
   { name: 'Sale Quantity', path: '/sale-quantity' },

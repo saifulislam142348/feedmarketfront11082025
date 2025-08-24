@@ -7,6 +7,7 @@
         <FilterComponent v-model="filters" />
 
         <div class="overflow-x-auto border rounded shadow mt-4">
+              <h1>Market Share for {{ area }}</h1>
             <table class="min-w-full table-fixed border-collapse text-sm">
                 <thead class="bg-blue-600 text-white sticky top-0 z-10">
                     <tr>
@@ -23,8 +24,17 @@
                     <tr v-for="(row, idx) in flatData" :key="idx" class="hover:bg-gray-100 transition-all">
                         <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ idx + 1 }}</td>
                         <td class="border border-gray-300 px-4 py-2 font-bold text-gray-700">{{ row.company_name }}</td>
-                        <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-600">{{ row.region }}</td>
-                        <td class="border border-gray-300 px-4 py-2 font-medium">{{ row.area }}</td>
+                        <td class="border border-gray-300 px-4 py-2 font-semibold text-gray-600">
+                            <RouterLink :to="{ path: '/area', query: { region: row.region } }"
+                                class="py-2 hover:underline">
+                                {{ row.region }}
+                            </RouterLink>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 font-medium">
+                            <RouterLink :to="{ path: '/area', query: { area: row.area } }" class="py-2 hover:underline">
+                                {{ row.area }}
+                            </RouterLink>
+                        </td>
                         <td class="border border-gray-300 px-4 py-2 font-medium">{{ row.territory }}</td>
                         <td class="border border-gray-300 px-4 py-2 font-medium">{{ capitalize(row.month) }} - {{
                             row.year }}</td>
@@ -47,7 +57,19 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import FilterComponent from '../components/filter/FilterComponent.vue'
 
-const filters = ref({})
+const { area } = defineProps({
+    area: String
+})
+const filters = ref({
+    year: '',
+    company: '',
+    region: '',
+    area: area || '',
+    territory: '',
+    sales_officer: '',
+    agent: '',
+    month: ''
+});
 const data = ref([])
 
 // Nested থেকে Flat ডেটা তৈরি
