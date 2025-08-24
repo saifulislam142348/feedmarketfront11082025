@@ -15,7 +15,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 17v-6h13M3 17h6m-6 0v2a2 2 0 002 2h6a2 2 0 002-2v-2" />
                     </svg>
-                    Sale Person Wise Monthly Qty
+                    Sale Person Wise 
                 </router-link>
 
                 <router-link to="/distributor-quantity" :class="[
@@ -27,7 +27,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h4l3-3 3 3h4v10H3z" />
                     </svg>
-                    Distributor Wise Monthly Qty
+                    Distributor Wise 
                 </router-link>
                 <!-- Filters -->
                 <div class="flex items-center gap-4">

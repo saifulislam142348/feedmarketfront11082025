@@ -1,6 +1,6 @@
 <template>
   <div class="p-6 mx-auto">
-    <h2 class="text-3xl font-bold mb-6">Zone Market Share Bag Qty</h2>
+    <h2 class="text-3xl font-bold mb-6">Zone Wise Market Share </h2>
 
     <!-- Filter -->
     <MarketShareFilter v-model="filters" />

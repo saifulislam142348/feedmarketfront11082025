@@ -1,6 +1,6 @@
 <template>
     <div class="p-6  mx-auto">
-        <h2 class="text-3xl font-bold mb-4">📊 Sale Person Quantity Wise Market Report</h2>
+        <h2 class="text-3xl font-bold mb-4">📊 Sales Person  Wise Report</h2>
 
         <div class="mb-4">
             <label for="companyDropdown" class="mr-2 font-semibold">Select Company:</label>

@@ -1,6 +1,13 @@
 <template>
     <div class="pb-4 pt-4 overflow-x-auto">
         <div class="flex flex-nowrap gap-1 min-w-max">
+            <!-- Aman Business -->
+            <el-select v-model="localFilters.amanBusiness" placeholder="Select Aman Business" clearable filterable
+                class="w-48" @change="emitFilter">
+                <el-option label="Select Aman Business" value="" />
+                <el-option label="With Aman Business" value="with" />
+                <el-option label="Without Aman Business" value="without" />
+            </el-select>
             <el-select v-model="localFilters.zone" placeholder="Select Zone" filterable clearable class="w-48"
                 @change="fetchRegions">
                 <el-option label="Select Zone" />
@@ -53,7 +60,7 @@ const props = defineProps({
         default: () => ({
             year: '', zone: '',
             region: '', area: '', territory: '', thana: '',
-            dealer: '', month: ''
+            dealer: '', month: '', amanBusiness: ''
         }),
     },
 })

@@ -12,13 +12,13 @@
 const menuItems = [
   { name: 'Home', path: '/dashboard' },
   { name: 'Sales Officer Graph', path: '/sales-officer-graph' },
-  { name: 'Region', path: '/region' },
+  // { name: 'Region', path: '/region' },
   // { name: 'Area', path: '/area' },
   // { name: 'Territory', path: '/territory' },
-  { name: 'Distributor', path: '/distributor-name' },
-  { name: 'Sales Officer', path: '/sales-officer' },
-  { name: 'Sale Quantity', path: '/sale-quantity' },
-  { name: 'MarketShare', path: '/market-share' },
+  // { name: 'Distributor', path: '/distributor-name' },
+  // { name: 'Sales Officer', path: '/sales-officer' },
+  { name: 'Yearly Report', path: '/sale-quantity' },
+  { name: 'Market Share', path: '/market-share' },
   { name: 'Zone Market Share', path: '/zone-market-share' },
   { name: 'Region Market Share', path: '/region-market-share' },
   { name: 'Area Market Share', path: '/area-market-share' }

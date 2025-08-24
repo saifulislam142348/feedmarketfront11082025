@@ -1,6 +1,6 @@
 <template>
   <div class="p-6 mx-auto">
-    <h2 class="text-3xl font-bold mb-6">Market Share with Month-Year</h2>
+    <h2 class="text-3xl font-bold mb-6">Brand Wise Market Share </h2>
 
     <!-- Filter -->
     <MarketShareFilter v-model="filters" />
@@ -65,8 +65,8 @@
           <span class="text-lg font-bold text-yellow-900">{{ totalRetailers }}</span>
         </div>
         <div class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full shadow-sm border border-green-300">
-          <span class="text-xs font-semibold text-yellow-800 uppercase tracking-wider">Total Market Quantity</span>
-          <span class="text-lg font-bold text-yellow-900">{{ formatNumber(total) }}</span>
+          <span class="text-xs font-semibold text-yellow-800 uppercase tracking-wider">Total Market Size</span>
+          <span class="text-lg font-bold text-yellow-900">{{ formatNumber(total) }} MT</span>
         </div>
       </div>
       <div class="flex justify-center items-center mt-4">
