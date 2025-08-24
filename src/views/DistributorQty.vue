@@ -31,74 +31,96 @@
                 </router-link>
 
                 <!-- Filters -->
-                <div class="flex items-center gap-4">
-                    <!-- region head Dropdown -->
-                    <el-select v-model="filters.region_head" placeholder="Region Head" clearable filterable
-                        @change="fetchData" class="w-32">
-                        <el-option :value="null" label="Region Head" />
-                        <el-option v-for="head in regionHeads" :key="head" :label="head" :value="head" />
-                    </el-select>
-                    <!-- Year Dropdown -->
-                    <el-select v-model="filters.year" placeholder="Select Year" clearable filterable @change="fetchData"
-                        class="w-32">
-                        <el-option :value="null" label="All Years" />
-                        <el-option v-for="y in availableYears" :key="y" :label="y.toString()" :value="y" />
-                    </el-select>
-                    <!-- Region -->
-                    <el-select v-model="filters.region" placeholder="Select Region" clearable filterable class="w-48"
-                        @change="fetchAreas">
-                        <el-option label="Select Region" />
-                        <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
-                    </el-select>
+            <div class="flex items-center gap-4">
+  <!-- Region Head -->
+  <div class="flex flex-col">
+    <label for="regionHead" class="text-sm font-medium text-gray-700">Region Head</label>
+    <el-select id="regionHead" v-model="filters.region_head" placeholder="Region Head"
+               clearable filterable @change="fetchData" class="w-32">
+      <el-option :value="null" label="All Region Head" />
+      <el-option v-for="head in regionHeads" :key="head" :label="head" :value="head" />
+    </el-select>
+  </div>
 
-                    <!-- Area -->
-                    <el-select v-model="filters.area" placeholder="Select Area" clearable filterable class="w-48"
-                        @change="fetchTerritories">
-                        <el-option label="Select Area" />
-                        <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
-                    </el-select>
+  <!-- Year -->
+  <div class="flex flex-col">
+    <label for="year" class="text-sm font-medium text-gray-700">Year</label>
+    <el-select id="year" v-model="filters.year" placeholder="Select Year"
+               clearable filterable @change="fetchData" class="w-32">
+      <el-option :value="null" label="All Years" />
+      <el-option v-for="y in availableYears" :key="y" :label="y.toString()" :value="y" />
+    </el-select>
+  </div>
 
-                    <!-- Territory -->
-                    <el-select v-model="filters.territory" placeholder="Select Territory" clearable filterable
-                        class="w-48" @change="fetchPersons">
-                        <el-option label="Select Territory" />
-                        <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
-                    </el-select>
+  <!-- Region -->
+  <div class="flex flex-col">
+    <label for="region" class="text-sm font-medium text-gray-700">Region</label>
+    <el-select id="region" v-model="filters.region" placeholder="Select Region"
+               clearable filterable @change="fetchAreas" class="w-48">
+      <el-option :value="null" label="All Regions" />
+      <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
+    </el-select>
+  </div>
 
-                    <!-- Distributor Dropdown -->
-                    <el-select v-model="filters.agent" placeholder="Select Distributor" clearable filterable
-                        @change="fetchData" class="w-40">
-                        <el-option :value="null" label="All Distributor" />
-                        <el-option v-for="m in distributors" :key="m.id ?? m.name" :label="m.name" :value="m.name" />
-                    </el-select>
+  <!-- Area -->
+  <div class="flex flex-col">
+    <label for="area" class="text-sm font-medium text-gray-700">Area</label>
+    <el-select id="area" v-model="filters.area" placeholder="Select Area"
+               clearable filterable @change="fetchTerritories" class="w-48">
+      <el-option :value="null" label="All Areas" />
+      <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
+    </el-select>
+  </div>
 
-                    <!-- Sales Officer Dropdown -->
-                    <el-select v-model="filters.sales_officer" placeholder="Select Sales Person" clearable filterable
-                        @change="fetchData" class="w-40">
-                        <el-option :value="null" label="All Sales Person" />
-                        <el-option v-for="z in saleOfficers" :key="z.id ?? z" :label="z" :value="z" />
-                    </el-select>
-                    <!-- /agent type filer -->
-                    <el-select v-model="filters.agent_type" placeholder="Select Agent Type" clearable filterable
-                        @change="fetchData" class="w-40">
-                        <el-option :value="null" label="All Agent Types" />
-                        <!-- static  -->
+  <!-- Territory -->
+  <div class="flex flex-col">
+    <label for="territory" class="text-sm font-medium text-gray-700">Territory</label>
+    <el-select id="territory" v-model="filters.territory" placeholder="Select Territory"
+               clearable filterable @change="fetchPersons" class="w-48">
+      <el-option :value="null" label="All Territories" />
+      <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
+    </el-select>
+  </div>
 
-                        <el-option label="Credit Agent" value="Credit Agent" />
-                        <el-option label="Cash Agent" value="Cash Agent" />
-                        <el-option label="Closed Agent" value="Closed Agent" />
+  <!-- Distributor -->
+  <div class="flex flex-col">
+    <label for="distributor" class="text-sm font-medium text-gray-700">Distributor</label>
+    <el-select id="distributor" v-model="filters.agent" placeholder="Select Distributor"
+               clearable filterable @change="fetchData" class="w-40">
+      <el-option :value="null" label="All Distributors" />
+      <el-option v-for="m in distributors" :key="m.id ?? m.name" :label="m.name" :value="m.name" />
+    </el-select>
+  </div>
 
+  <!-- Sales Officer -->
+  <div class="flex flex-col">
+    <label for="salesOfficer" class="text-sm font-medium text-gray-700">Sales Officer</label>
+    <el-select id="salesOfficer" v-model="filters.sales_officer" placeholder="Select Sales Person"
+               clearable filterable @change="fetchData" class="w-40">
+      <el-option :value="null" label="All Sales Persons" />
+      <el-option v-for="z in saleOfficers" :key="z.id ?? z" :label="z" :value="z" />
+    </el-select>
+  </div>
 
+  <!-- Agent Type -->
+  <div class="flex flex-col">
+    <label for="agentType" class="text-sm font-medium text-gray-700">Agent Type</label>
+    <el-select id="agentType" v-model="filters.agent_type" placeholder="Select Agent Type"
+               clearable filterable @change="fetchData" class="w-40">
+      <el-option :value="null" label="All Agent Types" />
+      <el-option label="Credit Agent" value="Credit Agent" />
+      <el-option label="Cash Agent" value="Cash Agent" />
+      <el-option label="Closed Agent" value="Closed Agent" />
+    </el-select>
+  </div>
 
+  <!-- Refresh Button -->
+  <button @click="refreshFilters"
+          class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+    Refresh
+  </button>
+</div>
 
-                    </el-select>
-
-                    <button @click="refreshFilters"
-                        class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-
-                        Refresh
-                    </button>
-                </div>
             </div>
 
 

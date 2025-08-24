@@ -15,7 +15,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 17v-6h13M3 17h6m-6 0v2a2 2 0 002 2h6a2 2 0 002-2v-2" />
                     </svg>
-                    Sale Person Wise 
+                    Sale Person Wise
                 </router-link>
 
                 <router-link to="/distributor-quantity" :class="[
@@ -27,106 +27,105 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h4l3-3 3 3h4v10H3z" />
                     </svg>
-                    Distributor Wise 
+                    Distributor Wise
                 </router-link>
                 <!-- Filters -->
-                <div class="flex items-center gap-4">
-                    <!-- region head Dropdown -->
-                    <el-select v-model="filters.region_head" placeholder="Region Head" clearable filterable
-                        @change="fetchData" class="w-32">
-                        <el-option :value="null" label="Region Head" />
-                        <el-option v-for="head in regionHeads" :key="head" :label="head" :value="head" />
-                    </el-select>
-                    <!-- Year Dropdown -->
-                    <el-select v-model="filters.year" placeholder="Select Year" clearable filterable @change="fetchData"
-                        class="w-32">
-                        <el-option :value="null" label="All Years" />
-                        <el-option v-for="y in availableYears" :key="y" :label="y.toString()" :value="y" />
-                    </el-select>
-                    <!-- Region -->
-                    <el-select v-model="filters.region" placeholder="Select Region" clearable filterable class="w-48"
-                        @change="fetchAreas">
-                        <el-option label="Select Region" />
-                        <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
-                    </el-select>
+              <div class="flex items-center gap-4">
+  <!-- Region Head -->
+  <div class="flex flex-col">
+    <label for="regionHead" class="text-sm font-medium text-gray-700">Region Head</label>
+    <el-select id="regionHead" v-model="filters.region_head" placeholder="Region Head"
+               clearable filterable @change="fetchData" class="w-32">
+      <el-option :value="null" label="All Region Head" />
+      <el-option v-for="head in regionHeads" :key="head" :label="head" :value="head" />
+    </el-select>
+  </div>
 
-                    <!-- Area -->
-                    <el-select v-model="filters.area" placeholder="Select Area" clearable filterable class="w-48"
-                        @change="fetchTerritories">
-                        <el-option label="Select Area" />
-                        <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
-                    </el-select>
+  <!-- Year -->
+  <div class="flex flex-col">
+    <label for="year" class="text-sm font-medium text-gray-700">Year</label>
+    <el-select id="year" v-model="filters.year" placeholder="Select Year"
+               clearable filterable @change="fetchData" class="w-32">
+      <el-option :value="null" label="All Years" />
+      <el-option v-for="y in availableYears" :key="y" :label="y.toString()" :value="y" />
+    </el-select>
+  </div>
 
-                    <!-- Territory -->
-                    <el-select v-model="filters.territory" placeholder="Select Territory" clearable filterable
-                        class="w-48" @change="fetchPersons">
-                        <el-option label="Select Territory" />
-                        <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
-                    </el-select>
+  <!-- Region -->
+  <div class="flex flex-col">
+    <label for="region" class="text-sm font-medium text-gray-700">Region</label>
+    <el-select id="region" v-model="filters.region" placeholder="Select Region"
+               clearable filterable @change="fetchAreas" class="w-48">
+      <el-option :value="null" label="All Regions" />
+      <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
+    </el-select>
+  </div>
 
-                    <!-- Distributor Dropdown -->
-                    <el-select v-model="filters.agent" placeholder="Select Distributor" clearable filterable
-                        @change="fetchData" class="w-40">
-                        <el-option :value="null" label="All Distributor" />
-                        <el-option v-for="m in distributors" :key="m.id ?? m.name" :label="m.name" :value="m.name" />
-                    </el-select>
+  <!-- Area -->
+  <div class="flex flex-col">
+    <label for="area" class="text-sm font-medium text-gray-700">Area</label>
+    <el-select id="area" v-model="filters.area" placeholder="Select Area"
+               clearable filterable @change="fetchTerritories" class="w-48">
+      <el-option :value="null" label="All Areas" />
+      <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
+    </el-select>
+  </div>
 
-                    <!-- Sales Officer Dropdown -->
-                    <el-select v-model="filters.sales_officer" placeholder="Select Sales Person" clearable filterable
-                        @change="fetchData" class="w-40">
-                        <el-option :value="null" label="All Sales Person" />
-                        <el-option v-for="z in saleOfficers" :key="z.id ?? z" :label="z" :value="z" />
-                    </el-select>
-                    <!-- /agent type filer -->
-                    <el-select v-model="filters.agent_type" placeholder="Select Agent Type" clearable filterable
-                        @change="fetchData" class="w-40">
-                        <el-option :value="null" label="All Agent Types" />
-                        <!-- static  -->
+  <!-- Territory -->
+  <div class="flex flex-col">
+    <label for="territory" class="text-sm font-medium text-gray-700">Territory</label>
+    <el-select id="territory" v-model="filters.territory" placeholder="Select Territory"
+               clearable filterable @change="fetchPersons" class="w-48">
+      <el-option :value="null" label="All Territories" />
+      <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
+    </el-select>
+  </div>
 
-                        <el-option label="Credit Agent" value="Credit Agent" />
-                        <el-option label="Cash Agent" value="Cash Agent" />
-                        <el-option label="Closed Agent" value="Closed Agent" />
+  <!-- Distributor -->
+  <div class="flex flex-col">
+    <label for="distributor" class="text-sm font-medium text-gray-700">Distributor</label>
+    <el-select id="distributor" v-model="filters.agent" placeholder="Select Distributor"
+               clearable filterable @change="fetchData" class="w-40">
+      <el-option :value="null" label="All Distributors" />
+      <el-option v-for="m in distributors" :key="m.id ?? m.name" :label="m.name" :value="m.name" />
+    </el-select>
+  </div>
 
+  <!-- Sales Officer -->
+  <div class="flex flex-col">
+    <label for="salesOfficer" class="text-sm font-medium text-gray-700">Sales Officer</label>
+    <el-select id="salesOfficer" v-model="filters.sales_officer" placeholder="Select Sales Person"
+               clearable filterable @change="fetchData" class="w-40">
+      <el-option :value="null" label="All Sales Persons" />
+      <el-option v-for="z in saleOfficers" :key="z.id ?? z" :label="z" :value="z" />
+    </el-select>
+  </div>
 
+  <!-- Agent Type -->
+  <div class="flex flex-col">
+    <label for="agentType" class="text-sm font-medium text-gray-700">Agent Type</label>
+    <el-select id="agentType" v-model="filters.agent_type" placeholder="Select Agent Type"
+               clearable filterable @change="fetchData" class="w-40">
+      <el-option :value="null" label="All Agent Types" />
+      <el-option label="Credit Agent" value="Credit Agent" />
+      <el-option label="Cash Agent" value="Cash Agent" />
+      <el-option label="Closed Agent" value="Closed Agent" />
+    </el-select>
+  </div>
 
+  <!-- Refresh Button -->
+  <button @click="refreshFilters"
+          class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+    Refresh
+  </button>
+</div>
 
-                    </el-select>
-                    <button @click="refreshFilters"
-                        class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-                        Refresh
-                    </button>
-                </div>
             </div>
             <!-- Refresh Button -->
 
 
             <!-- Agent Type Counters -->
-            <div class="mt-6 flex flex-wrap gap-3 items-center">
-
-                <!-- Credit Agent -->
-                <span
-                    class="font-semibold text-green-700 bg-green-100 border border-green-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
-                    Credit Agent: {{data.filter(row => row.agent_type === 'Credit Agent').length}}
-                </span>
-
-                <!-- Cash Agent -->
-                <span
-                    class="font-semibold text-blue-700 bg-blue-100 border border-blue-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
-                    Cash Agent: {{data.filter(row => row.agent_type === 'Cash Agent').length}}
-                </span>
-
-                <!-- Closed Agent -->
-                <span
-                    class="font-semibold text-red-700 bg-red-100 border border-red-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
-                    Closed Agent: {{data.filter(row => row.agent_type !== 'Credit Agent' && row.agent_type !== 'Cash Agent').length }}
-                </span>
-
-                <!-- Total Agent -->
-                <span
-                    class="font-semibold text-purple-700 bg-purple-100 border border-purple-400 rounded-full px-3 py-1 text-sm shadow-sm hover:shadow-md transition">
-                    Total Agent: {{ data.length }}
-                </span>
-            </div>
+           
             <!-- every month wise total qty -->
             <div class="mt-4 flex gap-4 items-center">
                 <span v-for="(qty, month) in monthlyTotalQty" :key="month"
@@ -309,8 +308,8 @@ const fetchPersons = async () => {
         const territory = filters.value.territory || ''
 
         const [proNames, salesNames] = await Promise.all([
-            axios.post('http://127.0.0.1:8000/api/market/distributor_name-by-territory', { territory }),
-            axios.post('http://127.0.0.1:8000/api/market/sales_officer-by-territory', { territory }),
+            axios.post('https://feedend.bditfirm.com/api/market/distributor_name-by-territory', { territory }),
+            axios.post('https://feedend.bditfirm.com/api/market/sales_officer-by-territory', { territory }),
         ])
 
         distributors.value = proNames.data || []
@@ -337,7 +336,7 @@ const fetchRegions = async () => {
     filters.region = ''
     regions.value = []
 
-    const res = await axios.post('http://127.0.0.1:8000/api/market/region-by-company', { company_name: filters.company })
+    const res = await axios.post('https://feedend.bditfirm.com/api/market/region-by-company', { company_name: filters.company })
     regions.value = res.data
 
     fetchData()
@@ -347,7 +346,7 @@ const fetchAreas = async () => {
     filters.area = ''
     areas.value = []
 
-    const res = await axios.post('http://127.0.0.1:8000/api/market/area-by-region', { region: filters.value.region })
+    const res = await axios.post('https://feedend.bditfirm.com/api/market/area-by-region', { region: filters.value.region })
     areas.value = res.data
     fetchData()
 
@@ -357,7 +356,7 @@ const fetchTerritories = async () => {
     filters.territory = ''
     territories.value = []
 
-    const res = await axios.post('http://127.0.0.1:8000/api/market/territory-by-area', { area: filters.value.area })
+    const res = await axios.post('https://feedend.bditfirm.com/api/market/territory-by-area', { area: filters.value.area })
     territories.value = res.data
 
     fetchData()
@@ -375,7 +374,7 @@ async function fetchData() {
         if (filters.value.agent_type) params.agent_type = filters.value.agent_type
         if (filters.value.region_head) params.region_head = filters.value.region_head
 
-        const res = await axios.get('http://127.0.0.1:8000/api/market/sale-person-wise-monthly-saleQty', { params })
+        const res = await axios.get('https://feedend.bditfirm.com/api/market/sale-person-wise-monthly-saleQty', { params })
         data.value = res.data.result || []
         regionHeads.value = res.data.regionHeads || []
         monthlyTotalQty.value = res.data.monthly_total_qty || []

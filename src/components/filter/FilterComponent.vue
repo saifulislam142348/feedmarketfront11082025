@@ -2,59 +2,81 @@
   <div class="pb-4 pt-4 overflow-x-auto">
     <div class="flex flex-nowrap gap-4 min-w-max">
 
-      <!-- Year -->
-      <el-select v-model="localFilters.month" placeholder="Select Month Year" filterable clearable class="w-48"
-        @change="fetchMonths">
-        <el-option label="Select MonthYear" value="" />
-        <el-option v-for="item in months" :key="item.month" :label="item.month + '-' + item.year" :value="item.month" />
-      </el-select>
+      <!-- Month - Year -->
+      <div class="flex flex-col w-48">
+        <label for="monthYear" class="text-sm font-medium text-gray-700">Month - Year</label>
+        <el-select id="monthYear" v-model="localFilters.month" placeholder="Select Month Year"
+          filterable clearable class="w-full" @change="fetchMonths">
+          <el-option label="Select MonthYear" value="" />
+          <el-option v-for="item in months" :key="item.month"
+            :label="item.month + '-' + item.year" :value="item.month" />
+        </el-select>
+      </div>
 
       <!-- Company -->
-      <el-select v-model="localFilters.company" placeholder="Select Company" filterable clearable class="w-48"
-        @change="fetchRegions">
-        <el-option label="Select Company" />
-        <el-option v-for="item in companies" :key="item" :label="item" :value="item" />
-      </el-select>
-
-
+      <div class="flex flex-col w-48">
+        <label for="company" class="text-sm font-medium text-gray-700">Company</label>
+        <el-select id="company" v-model="localFilters.company" placeholder="Select Company"
+          filterable clearable class="w-full" @change="fetchRegions">
+          <el-option label="Select Company" />
+          <el-option v-for="item in companies" :key="item" :label="item" :value="item" />
+        </el-select>
+      </div>
 
       <!-- Region -->
-      <el-select v-model="localFilters.region" placeholder="Select Region" filterable clearable class="w-48" @change="fetchAreas">
-        <el-option label="Select Region" />
-        <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
-      </el-select>
+      <div class="flex flex-col w-48">
+        <label for="region" class="text-sm font-medium text-gray-700">Region</label>
+        <el-select id="region" v-model="localFilters.region" placeholder="Select Region"
+          filterable clearable class="w-full" @change="fetchAreas">
+          <el-option label="Select Region" />
+          <el-option v-for="item in regions" :key="item" :label="item" :value="item" />
+        </el-select>
+      </div>
 
       <!-- Area -->
-      <el-select v-model="localFilters.area" placeholder="Select Area" filterable clearable class="w-48"
-        @change="fetchTerritories">
-        <el-option label="Select territory" />
-        <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
-      </el-select>
+      <div class="flex flex-col w-48">
+        <label for="area" class="text-sm font-medium text-gray-700">Area</label>
+        <el-select id="area" v-model="localFilters.area" placeholder="Select Area"
+          filterable clearable class="w-full" @change="fetchTerritories">
+          <el-option label="Select Area" />
+          <el-option v-for="item in areas" :key="item" :label="item" :value="item" />
+        </el-select>
+      </div>
 
       <!-- Territory -->
-      <el-select v-model="localFilters.territory" placeholder="Select Territory" filterable clearable class="w-48"
-        @change="fetchPersons">
-        <el-option label="Select Territory" />
-        <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
-      </el-select>
+      <div class="flex flex-col w-48">
+        <label for="territory" class="text-sm font-medium text-gray-700">Territory</label>
+        <el-select id="territory" v-model="localFilters.territory" placeholder="Select Territory"
+          filterable clearable class="w-full" @change="fetchPersons">
+          <el-option label="Select Territory" />
+          <el-option v-for="item in territories" :key="item" :label="item" :value="item" />
+        </el-select>
+      </div>
 
+      <!-- Proprietor Name -->
+      <div class="flex flex-col w-48">
+        <label for="proprietor" class="text-sm font-medium text-gray-700">Proprietor</label>
+        <el-select id="proprietor" v-model="localFilters.agent" placeholder="Select Proprietor"
+          filterable clearable class="w-full" @change="emitFilter">
+          <el-option label="Select Proprietor" />
+          <el-option v-for="item in distributors" :key="item.name" :label="item.name" :value="item.name" />
+        </el-select>
+      </div>
 
-      <!-- SP Name -->
-      <el-select v-model="localFilters.agent" placeholder="Select proprietor_name" filterable clearable class="w-48"
-        @change="emitFilter">
-        <el-option label="Select Proprieter" />
-        <el-option v-for="item in distributors" :key="item.name" :label="item.name" :value="item.name" />
-      </el-select>
+      <!-- Sales Officer -->
+      <div class="flex flex-col w-48">
+        <label for="salesOfficer" class="text-sm font-medium text-gray-700">Sales Officer</label>
+        <el-select id="salesOfficer" v-model="localFilters.sales_officer" placeholder="Select Sales Officer"
+          filterable clearable class="w-full" @change="emitFilter">
+          <el-option label="Select Sales Officer" />
+          <el-option v-for="item in saleOfficers" :key="item" :label="item" :value="item" />
+        </el-select>
+      </div>
 
-      <!-- Distributor -->
-      <el-select v-model="localFilters.sales_officer" placeholder="Select sales_officer" filterable clearable class="w-48"
-        @change="emitFilter">
-        <el-option label="Select Sales Officer" />
-        <el-option v-for="item in saleOfficers" :key="item" :label="item" :value="item" />
-      </el-select>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
