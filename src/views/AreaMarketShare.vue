@@ -165,6 +165,7 @@ function getOrdinal(n) {
 }
 const brandFields = [
   { key: 'aman', label: 'Aman' },
+  { key: 'a1', label: 'A1' },
   { key: 'nourish', label: 'Nourish' },
   { key: 'kazi', label: 'Kazi' },
   { key: 'paragon', label: 'Paragon' },
