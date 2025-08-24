@@ -65,10 +65,10 @@
           <span class="text-xs font-semibold text-yellow-800 uppercase tracking-wider">Total Retailers:</span>
           <span class="text-lg font-bold text-yellow-900">{{ totalRetailers }}</span>
         </div>
-        <!-- <div class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full shadow-sm border border-green-300">
+        <div class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full shadow-sm border border-green-300">
           <span class="text-xs font-semibold text-yellow-800 uppercase tracking-wider">Total Quantity</span>
-          <span class="text-lg font-bold text-yellow-900">{{ total }}</span>
-        </div> -->
+          <span class="text-lg font-bold text-yellow-900">{{ formatNumber(total) }}</span>
+        </div>
       </div>
       <div class="flex justify-center items-center mt-4">
         <span class="text-sm text-gray-600">Showing {{ rawData.length }} records</span>
