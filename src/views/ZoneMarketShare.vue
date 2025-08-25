@@ -82,7 +82,7 @@
     <thead class="bg-blue-600 text-white sticky top-0 z-10">
       <tr>
         <th class="th px-2 py-2">SL</th>
-        <th class="th px-2 py-2">Dealer</th>
+        <th class="th px-2 py-2">Zone</th>
         <th v-for="brand in brandFields" :key="brand.key" class="th px-2 py-2">{{ brand.label }}</th>
         <th class="th px-2 py-2">Total</th>
       </tr>
@@ -91,7 +91,7 @@
       <tr v-for="(value, index) in rawData" :key="index">
         <td class="td text-center font-semibold text-gray-800 px-2 py-1">{{ index + 1 }}</td>
         <td class="td font-semibold text-gray-800 px-2 py-1">
-          {{ value.dealer ?? 'No Dealer' }}<br>
+          {{ value.zone ?? 'No Zone' }}<br>
           <span class="text-blue-400">{{ value.territory }} <br> {{ value.phone }}</span>
         </td>
         <td v-for="brand in brandFields" :key="brand.key" class="td text-right font-mono px-2 py-1">
