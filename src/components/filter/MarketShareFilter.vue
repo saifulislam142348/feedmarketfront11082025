@@ -8,7 +8,7 @@
         <el-select id="monthYear" v-model="localFilters.month" placeholder="Select Month - Year" filterable
           clearable class="w-full" @change="fetchMonths">
           <el-option v-for="item in months" :key="`${item.month}-${item.year}`"
-            :label="`${item.month}-${item.year}`" :value="`${item.month}-${item.year}`" />
+            :label="`${item.month}-${item.year}`" :value="item.month" />
         </el-select>
       </div>
 
@@ -144,7 +144,6 @@ const fetchMonths = async () => {
 const fetchRegions = async () => {
 
     regions.value = []
-    areas.value = []
 
 
     const res = await axios.post('http://127.0.0.1:8000/api/market/market-region-by-zone', { zone: localFilters.zone })
